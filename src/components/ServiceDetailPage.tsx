@@ -167,43 +167,46 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service })
       {/* Full Record Dialog Modal */}
       {activeProjectModal && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
           onClick={() => setActiveProjectModal(null)}
         >
+          {/* Outer Frame with Rounded Corners & Border */}
           <div 
-            className="bg-white text-black rounded-3xl sm:rounded-[2.5rem] border-2 border-black w-full max-w-2xl lg:max-w-3xl max-h-[88vh] overflow-y-auto p-5 sm:p-8 sm:p-10 relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] my-auto box-border"
+            className="bg-white text-black rounded-3xl sm:rounded-[2.5rem] border-2 border-black w-full max-w-2xl lg:max-w-3xl max-h-[85vh] flex flex-col relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden my-auto box-border"
             onClick={(e) => e.stopPropagation()}
           >
             
-            {/* Close Modal Button */}
-            <button
-              onClick={() => setActiveProjectModal(null)}
-              className="absolute top-6 right-6 p-2 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition-colors cursor-pointer z-10"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {/* Subtitle & Title */}
-            <div className="mb-6">
+            {/* Sticky Header Bar with Title Tag & Close Button */}
+            <div className="flex items-center justify-between p-5 sm:px-8 sm:pt-6 sm:pb-4 bg-white border-b border-black/10 z-10 flex-shrink-0">
               <span className="text-xs font-mono font-bold uppercase tracking-widest px-3.5 py-1 rounded-full border border-black bg-neutral-100 text-black">
                 {activeProjectModal.subtitle || 'Project Record'}
               </span>
-              <h2 className="font-display text-3xl sm:text-5xl font-black tracking-tight text-black mt-3">
+              <button
+                onClick={() => setActiveProjectModal(null)}
+                className="p-2 rounded-full border-2 border-black bg-white hover:bg-black hover:text-white transition-colors cursor-pointer"
+                title="Close Modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Inner Clean Scroll View (scrolls smoothly inside the rounded border without scrollbar clipping corners!) */}
+            <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-6">
+              
+              <h2 className="font-display text-3xl sm:text-5xl font-black tracking-tight text-black">
                 {activeProjectModal.title}
               </h2>
-            </div>
 
-            {/* Media Image / Video Preview in Modal */}
-            <div className="rounded-2xl border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-black mb-6 aspect-video">
-              <img
-                src={activeProjectModal.imageUrl}
-                alt={activeProjectModal.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+              {/* Media Image Preview in Modal */}
+              <div className="rounded-2xl border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-black aspect-video">
+                <img
+                  src={activeProjectModal.imageUrl}
+                  alt={activeProjectModal.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
-            {/* Full Story Description */}
-            <div className="space-y-6">
+              {/* Full Story Description */}
               <div>
                 <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2">
                   PROJECT OVERVIEW
@@ -258,8 +261,8 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service })
                   </a>
                 </div>
               )}
-            </div>
 
+            </div>
           </div>
         </div>
       )}
