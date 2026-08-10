@@ -3,18 +3,18 @@ import { Box, Palette, Sparkles, Layers, Cpu, Heart, Activity, Compass, Flame } 
 
 export const SkillsSection: React.FC = () => {
   const softwareCards = [
-    { id: 'maya', title: 'AUTODESK MAYA', icon: Cpu, badgeBg: 'bg-amber-300' },
-    { id: 'blender', title: 'BLENDER 3D', icon: Box, badgeBg: 'bg-emerald-300' },
-    { id: 'zbrush', title: 'ZBRUSH SCULPTING', icon: Flame, badgeBg: 'bg-blue-300' },
-    { id: 'aftereffects', title: 'AFTER EFFECTS', icon: Layers, badgeBg: 'bg-purple-300' },
-    { id: 'photoshop', title: 'PHOTOSHOP & PROCREATE', icon: Palette, badgeBg: 'bg-rose-300' },
-    { id: 'substance', title: 'SUBSTANCE PAINTER', icon: Sparkles, badgeBg: 'bg-yellow-300' }
+    { id: 'maya', title: 'AUTODESK MAYA', icon: Cpu },
+    { id: 'blender', title: 'BLENDER 3D', icon: Box },
+    { id: 'zbrush', title: 'ZBRUSH SCULPTING', icon: Flame },
+    { id: 'aftereffects', title: 'AFTER EFFECTS', icon: Layers },
+    { id: 'photoshop', title: 'PHOTOSHOP & PROCREATE', icon: Palette },
+    { id: 'substance', title: 'SUBSTANCE PAINTER', icon: Sparkles }
   ];
 
   const softSkillsCards = [
-    { id: 'performance', title: 'CHARACTER PERFORMANCE', icon: Heart, badgeBg: 'bg-pink-300' },
-    { id: 'mechanics', title: 'BODY MECHANICS & PHYSICS', icon: Activity, badgeBg: 'bg-cyan-300' },
-    { id: 'direction', title: 'CREATIVE DIRECTION', icon: Compass, badgeBg: 'bg-lime-300' }
+    { id: 'performance', title: 'CHARACTER PERFORMANCE', icon: Heart },
+    { id: 'mechanics', title: 'BODY MECHANICS & PHYSICS', icon: Activity },
+    { id: 'direction', title: 'CREATIVE DIRECTION', icon: Compass }
   ];
 
   return (
@@ -61,7 +61,7 @@ export const SkillsSection: React.FC = () => {
                   key={card.id}
                   className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
                 >
-                  <div className={`w-8 h-8 rounded-full border-2 border-black ${card.badgeBg} flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:scale-110 transition-transform`}>
+                  <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
                     <IconComponent className="w-4 h-4 stroke-[2.5]" />
                   </div>
                   <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
@@ -91,7 +91,7 @@ export const SkillsSection: React.FC = () => {
                   key={card.id}
                   className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
                 >
-                  <div className={`w-8 h-8 rounded-full border-2 border-black ${card.badgeBg} flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:scale-110 transition-transform`}>
+                  <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
                     <IconComponent className="w-4 h-4 stroke-[2.5]" />
                   </div>
                   <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
