@@ -151,21 +151,44 @@ export const CasesSection: React.FC = () => {
               {/* RIGHT COLUMN: 3D Tilted "Coming Out" Poster Card with Floating Doodle Sparkle Array */}
               <div className="lg:col-span-5 flex justify-center lg:justify-end [perspective:1200px] relative group">
                 
-                {/* 5 Floating Doodle Sparkles around photo corners & sides */}
-                <div className="absolute -top-7 -right-6 z-30 pointer-events-none">
+                {/* 12 Floating Doodle Stars & Sparkles Orbiting Behind Poster Card */}
+                <div className="absolute -top-10 -right-8 z-30 pointer-events-none">
                   <DoodleStar className="w-10 h-10 text-white animate-pulse" />
                 </div>
-                <div className="absolute -top-5 -left-5 z-30 pointer-events-none">
-                  <DoodleSparkle className="w-6 h-6 text-white animate-pulse delay-100" />
+                <div className="absolute -top-8 -left-8 z-30 pointer-events-none">
+                  <DoodleSparkle className="w-7 h-7 text-white animate-pulse delay-100" />
                 </div>
-                <div className="absolute -bottom-6 -left-6 z-30 pointer-events-none">
+                <div className="absolute -bottom-8 -left-8 z-30 pointer-events-none">
                   <DoodleSparkle className="w-9 h-9 text-white animate-pulse delay-200" />
                 </div>
-                <div className="absolute -bottom-4 -right-4 z-30 pointer-events-none">
-                  <DoodleStar className="w-7 h-7 text-white animate-pulse delay-300" />
+                <div className="absolute -bottom-6 -right-6 z-30 pointer-events-none">
+                  <DoodleStar className="w-8 h-8 text-white animate-pulse delay-300" />
                 </div>
-                <div className="absolute top-1/2 -right-7 -translate-y-1/2 z-30 pointer-events-none">
-                  <DoodleSparkle className="w-5 h-5 text-white animate-pulse delay-150" />
+
+                <div className="absolute top-1/4 -left-12 z-30 pointer-events-none">
+                  <DoodleStar className="w-6 h-6 text-white animate-pulse delay-150" />
+                </div>
+                <div className="absolute top-1/2 -right-10 -translate-y-1/2 z-30 pointer-events-none">
+                  <DoodleSparkle className="w-6 h-6 text-white animate-pulse delay-250" />
+                </div>
+                <div className="absolute bottom-1/4 -right-12 z-30 pointer-events-none">
+                  <DoodleStar className="w-5 h-5 text-white animate-pulse delay-350" />
+                </div>
+                <div className="absolute top-1/3 -right-14 z-30 pointer-events-none">
+                  <DoodleSparkle className="w-4 h-4 text-white animate-pulse delay-50" />
+                </div>
+
+                <div className="absolute -top-12 left-1/3 z-30 pointer-events-none">
+                  <DoodleSparkle className="w-5 h-5 text-white animate-pulse delay-200" />
+                </div>
+                <div className="absolute -bottom-10 right-1/3 z-30 pointer-events-none">
+                  <DoodleSparkle className="w-6 h-6 text-white animate-pulse delay-300" />
+                </div>
+                <div className="absolute top-2/3 -left-10 z-30 pointer-events-none">
+                  <DoodleSparkle className="w-7 h-7 text-white animate-pulse delay-100" />
+                </div>
+                <div className="absolute bottom-1/3 -left-14 z-30 pointer-events-none">
+                  <DoodleStar className="w-5 h-5 text-white animate-pulse delay-250" />
                 </div>
 
                 <div 
