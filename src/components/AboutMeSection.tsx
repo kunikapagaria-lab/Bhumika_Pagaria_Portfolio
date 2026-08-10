@@ -52,7 +52,7 @@ export const AboutMeSection: React.FC = () => {
             <div className="pt-4 border-t border-neutral-200">
               <h4 className="font-bold text-xs uppercase tracking-wider text-neutral-400 mb-2">Education & Degrees</h4>
               <ul className="space-y-1 text-sm font-semibold text-black">
-                {education.map((edu, idx) => (
+                {(education || []).map((edu, idx) => (
                   <li key={idx} className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-black" />
                     <span>{edu}</span>
@@ -63,7 +63,7 @@ export const AboutMeSection: React.FC = () => {
 
             {/* Characteristic Pills Grid matching mockup */}
             <div className="pt-4 flex flex-wrap gap-2.5">
-              {tags.map((tag) => (
+              {(tags || []).map((tag) => (
                 <span
                   key={tag}
                   className="px-4 py-2 rounded-full text-xs font-bold border-2 border-black bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:scale-105 transition-transform"
