@@ -1,0 +1,109 @@
+import React from 'react';
+import { Box, Palette, Sparkles, Layers, Cpu, Heart, Activity, Compass, Flame } from 'lucide-react';
+
+export const SkillsSection: React.FC = () => {
+  const softwareCards = [
+    { id: 'maya', title: 'AUTODESK MAYA', icon: Cpu, badgeBg: 'bg-amber-300' },
+    { id: 'blender', title: 'BLENDER 3D', icon: Box, badgeBg: 'bg-emerald-300' },
+    { id: 'zbrush', title: 'ZBRUSH SCULPTING', icon: Flame, badgeBg: 'bg-blue-300' },
+    { id: 'aftereffects', title: 'AFTER EFFECTS', icon: Layers, badgeBg: 'bg-purple-300' },
+    { id: 'photoshop', title: 'PHOTOSHOP & PROCREATE', icon: Palette, badgeBg: 'bg-rose-300' },
+    { id: 'substance', title: 'SUBSTANCE PAINTER', icon: Sparkles, badgeBg: 'bg-yellow-300' }
+  ];
+
+  const softSkillsCards = [
+    { id: 'performance', title: 'CHARACTER PERFORMANCE', icon: Heart, badgeBg: 'bg-pink-300' },
+    { id: 'mechanics', title: 'BODY MECHANICS & PHYSICS', icon: Activity, badgeBg: 'bg-cyan-300' },
+    { id: 'direction', title: 'CREATIVE DIRECTION', icon: Compass, badgeBg: 'bg-lime-300' }
+  ];
+
+  return (
+    <section id="skills" className="min-h-screen snap-start flex flex-col justify-center py-16 md:py-20 bg-white text-black relative overflow-hidden border-t-2 border-black">
+      
+      {/* Subtle Sketchy Dot Grid Canvas Pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.12] pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(#000000 1px, transparent 1px)',
+          backgroundSize: '24px 24px'
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+        
+        {/* Section Top Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 border-b-2 border-black pb-6">
+          <div>
+            <span className="font-display text-2xl sm:text-3xl font-light tracking-tight text-neutral-500 block mb-1">
+              (skills)
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-black">
+              software tools and soft skills
+            </h2>
+          </div>
+        </div>
+
+        {/* VERTICAL SUBSECTION 1: SOFTWARE TOOLS */}
+        <div className="mb-10 sm:mb-12">
+          <div className="flex items-center justify-between mb-4 border-b border-black/15 pb-2.5">
+            <h3 className="font-mono text-xs sm:text-sm font-extrabold uppercase tracking-[0.25em] text-black flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-black" />
+              SOFTWARE TOOLS & PRODUCTION PIPELINE
+            </h3>
+            <span className="text-xs font-mono font-bold text-neutral-500">[{softwareCards.length} TOOLS]</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
+            {softwareCards.map((card) => {
+              const IconComponent = card.icon;
+              return (
+                <div
+                  key={card.id}
+                  className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
+                >
+                  <div className={`w-8 h-8 rounded-full border-2 border-black ${card.badgeBg} flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:scale-110 transition-transform`}>
+                    <IconComponent className="w-4 h-4 stroke-[2.5]" />
+                  </div>
+                  <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
+                    {card.title}
+                  </h4>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* VERTICAL SUBSECTION 2: SOFT SKILLS */}
+        <div>
+          <div className="flex items-center justify-between mb-4 border-b border-black/15 pb-2.5">
+            <h3 className="font-mono text-xs sm:text-sm font-extrabold uppercase tracking-[0.25em] text-black flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-black" />
+              SOFT SKILLS & CREATIVE COMPETENCIES
+            </h3>
+            <span className="text-xs font-mono font-bold text-neutral-500">[{softSkillsCards.length} SKILLS]</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
+            {softSkillsCards.map((card) => {
+              const IconComponent = card.icon;
+              return (
+                <div
+                  key={card.id}
+                  className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
+                >
+                  <div className={`w-8 h-8 rounded-full border-2 border-black ${card.badgeBg} flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:scale-110 transition-transform`}>
+                    <IconComponent className="w-4 h-4 stroke-[2.5]" />
+                  </div>
+                  <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
+                    {card.title}
+                  </h4>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+};

@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Outfit', sans-serif;
+  }
+  
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    font-size: 14.5px;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #09090b;
+    overflow-x: hidden;
+  }
+}
+
+/* Full-Page Section Scroll Snap */
+.snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  height: 100vh;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f4f4f5;
+}
+::-webkit-scrollbar-thumb {
+  background: #18181b;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+}
+
+/* Custom Typography Utilities */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Hand-Doodled Sketchy Styling System */
+.btn-pill {
+  @apply inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold tracking-wide transition-all duration-200 cursor-pointer active:scale-95;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.btn-pill-dark {
+  @apply bg-black text-white hover:bg-neutral-800 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5;
+}
+
+.btn-pill-light {
+  @apply bg-white text-black hover:bg-neutral-100 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5;
+}
+
+.btn-pill-inverted {
+  @apply bg-white text-black hover:bg-neutral-200 border-2 border-white shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-0.5;
+}
+
+.tag-pill {
+  @apply inline-flex items-center px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border-2 border-black bg-white/90 text-black backdrop-blur-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:scale-105;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.tag-pill-dark {
+  @apply inline-flex items-center px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border-2 border-white bg-black/90 text-white backdrop-blur-sm shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all duration-200 hover:scale-105;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.card-editorial {
+  @apply bg-white border-[1.5px] border-neutral-900 p-8 sm:p-10 transition-all duration-300 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.card-editorial-dark {
+  @apply bg-neutral-900 border-[2.5px] border-neutral-700 p-8 transition-all duration-300 hover:border-white hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.9)] hover:-translate-y-1 text-white;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}

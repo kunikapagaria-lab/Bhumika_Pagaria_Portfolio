@@ -1,0 +1,96 @@
+export const projectSchema = {
+  name: 'project',
+  title: 'Projects & Highlights',
+  type: 'document',
+  fields: [
+    { name: 'title', title: 'Project Title', type: 'string' },
+    { name: 'subtitle', title: 'Subtitle / Category Tag', type: 'string' },
+    { 
+      name: 'category', 
+      title: 'Service Category', 
+      type: 'string',
+      options: {
+        list: [
+          { title: '3D Animation', value: '3d-animation' },
+          { title: '3D Modelling', value: '3d-modelling' },
+          { title: 'Illustrations', value: 'illustrations' },
+          { title: 'Client Design', value: 'client-design' },
+          { title: 'Logo Design', value: 'logo-design' },
+          { title: 'Others', value: 'others' },
+        ]
+      }
+    },
+    { name: 'description', title: 'Detailed Description', type: 'text' },
+    { name: 'mainImage', title: 'Preview Cover Image', type: 'image', options: { hotspot: true } },
+    { name: 'videoUrl', title: 'Vimeo Video URL', type: 'url', description: 'e.g. https://player.vimeo.com/video/641042738' },
+    { name: 'tools', title: 'Software & Tools Used', type: 'array', of: [{ type: 'string' }] },
+    { name: 'breakdown', title: 'Breakdown Points', type: 'array', of: [{ type: 'string' }] },
+    { name: 'isHighlight', title: 'Show in Hero Carousel Highlights?', type: 'boolean' },
+    { name: 'link', title: 'External Link / Case Study URL', type: 'url' }
+  ]
+};
+
+export const serviceSchema = {
+  name: 'service',
+  title: 'Services (Outside Cards)',
+  type: 'document',
+  fields: [
+    { name: 'title', title: 'Service Title', type: 'string' },
+    { name: 'description', title: 'Short Overview Description', type: 'text' },
+    { name: 'tags', title: 'Service Tags', type: 'array', of: [{ type: 'string' }] },
+    { name: 'bgImage', title: 'Card Background Image', type: 'image', options: { hotspot: true } },
+    { name: 'order', title: 'Display Order', type: 'number' }
+  ]
+};
+
+export const skillSchema = {
+  name: 'skill',
+  title: 'Skills & Toolkit',
+  type: 'document',
+  fields: [
+    { name: 'name', title: 'Skill Name', type: 'string' },
+    { 
+      name: 'type', 
+      title: 'Skill Type', 
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Software & Tool', value: 'tool' },
+          { title: 'Soft Skill & Competency', value: 'soft' }
+        ]
+      }
+    }
+  ]
+};
+
+export const personalInfoSchema = {
+  name: 'personalInfo',
+  title: 'About Me & Social Links',
+  type: 'document',
+  fields: [
+    { name: 'name', title: 'Full Name', type: 'string' },
+    { name: 'tagline', title: 'Hero Tagline', type: 'string' },
+    { name: 'bio', title: 'About Me Bio Paragraph', type: 'text' },
+    { name: 'profileImage', title: 'Profile / Bio Photo', type: 'image', options: { hotspot: true } },
+    { name: 'resumeFile', title: 'Resume / CV PDF Document (Upload PDF)', type: 'file', options: { accept: '.pdf' } },
+    { name: 'resumeUrl', title: 'Resume / CV PDF External Link (Optional)', type: 'url' },
+    { name: 'vimeoUrl', title: 'Vimeo Channel URL', type: 'url' },
+    { name: 'instagramUrl', title: 'Instagram Profile URL', type: 'url' },
+    { name: 'linkedinUrl', title: 'LinkedIn Profile URL', type: 'url' },
+    { name: 'email', title: 'Contact Email', type: 'string' }
+  ]
+};
+
+export const testimonialSchema = {
+  name: 'testimonial',
+  title: 'Testimonials & Sticky Notes',
+  type: 'document',
+  fields: [
+    { name: 'author', title: 'Client / Author Name', type: 'string' },
+    { name: 'company', title: 'Studio / Role', type: 'string' },
+    { name: 'quote', title: 'Feedback / Sticky Note Quote', type: 'text' },
+    { name: 'rating', title: 'Rating (1-5 Stars)', type: 'number', initialValue: 5 },
+    { name: 'color', title: 'Sticky Note Color', type: 'string' },
+    { name: 'isApproved', title: 'Approved by Bhumika? (Show on Whiteboard)', type: 'boolean', initialValue: false }
+  ]
+};
