@@ -19,7 +19,8 @@ export function urlFor(source: any) {
 // Fetch all portfolio data from Sanity CMS with automatic fallback to PORTFOLIO_DATA
 export async function fetchSanityPortfolioData() {
   try {
-    if (!import.meta.env.VITE_SANITY_PROJECT_ID || import.meta.env.VITE_SANITY_PROJECT_ID === 'your_sanity_project_id_here') {
+    const projectId = import.meta.env.VITE_SANITY_PROJECT_ID || '5vq8pnxl';
+    if (!projectId || projectId === 'your_sanity_project_id_here') {
       return PORTFOLIO_DATA;
     }
     
