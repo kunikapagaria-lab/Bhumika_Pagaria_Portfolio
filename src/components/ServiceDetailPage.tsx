@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { type Service } from '../data/portfolioData';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ExternalLink, ArrowUpRight, FolderGit2, Play } from 'lucide-react';
+import { ExternalLink, FolderGit2, Play } from 'lucide-react';
 import { DoodleStar } from './DoodleAccents';
 
 interface ServiceDetailPageProps {
@@ -10,11 +10,7 @@ interface ServiceDetailPageProps {
   onOpenContact: () => void;
 }
 
-export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
-  service,
-  onBack,
-  onOpenContact,
-}) => {
+export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service }) => {
   const portfolioData = usePortfolio();
   const [playingVideoMap, setPlayingVideoMap] = useState<Record<string, boolean>>({});
 
@@ -33,10 +29,10 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
   const displayProjects = categoryProjects.length > 0 ? categoryProjects : portfolioData.projects;
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 flex flex-col justify-between pt-8">
+    <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 flex flex-col justify-between pt-24 pb-16">
       
       {/* Header Section: Title high up on top, followed by Description */}
-      <main className="flex-1 py-10 sm:py-16">
+      <main className="flex-1 py-6 sm:py-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Service Title high up on top */}
@@ -170,42 +166,8 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
             })}
           </div>
 
-          {/* CTA Box at bottom of showcase */}
-          <div className="mt-24 text-center p-12 rounded-[2.5rem] bg-black text-white space-y-6 shadow-2xl">
-            <h3 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Have a {service.title} project in mind?
-            </h3>
-            <p className="text-neutral-400 text-sm max-w-md mx-auto">
-              Let's collaborate and bring your ideas to life with high quality renders and production animation.
-            </p>
-            <button
-              onClick={onOpenContact}
-              className="btn-pill btn-pill-inverted text-sm px-8 py-3.5 shadow-lg group inline-flex items-center"
-            >
-              <span>Start Collaboration</span>
-              <ArrowUpRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </button>
-          </div>
-
         </div>
       </main>
-
-      {/* Footer Return Bar */}
-      <footer className="py-8 bg-black text-white text-center border-t border-neutral-900">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-neutral-400 text-xs font-mono uppercase tracking-wider">
-            {service.title} Portfolio Showcase
-          </p>
-          <div className="flex gap-3">
-            <button onClick={onOpenContact} className="btn-pill btn-pill-inverted text-xs px-6 py-2">
-              Contact Bhumika
-            </button>
-            <button onClick={onBack} className="btn-pill btn-pill-light text-xs px-5 py-2">
-              ← Return to Main Page
-            </button>
-          </div>
-        </div>
-      </footer>
 
     </div>
   );
