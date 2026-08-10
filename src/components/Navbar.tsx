@@ -29,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onHomeClick, isDe
   }, []);
 
   const navLinks = [
+    { label: 'home', href: '#hero' },
     { label: 'services', href: '#services' },
     { label: 'highlight', href: '#cases' },
     { label: 'skills', href: '#skills' },
