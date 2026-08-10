@@ -16,12 +16,12 @@ export const AboutMeSection: React.FC = () => {
           </span>
           
           <h2 className="font-display text-3xl sm:text-5xl font-black text-black tracking-tight leading-tight">
-            my name is {name} and my nickname is {nickname}
+            my name is {name} {nickname ? `and my nickname is ${nickname}` : ''}
           </h2>
 
           <div className="mt-4">
             <span className="inline-block px-5 py-1.5 rounded-full border-2 border-black bg-neutral-100 text-xs font-bold uppercase tracking-wider text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-              @BHUMIKA_PAGARIA
+              @{name.toUpperCase().replace(/\s+/g, '_')}
             </span>
           </div>
         </div>
@@ -33,8 +33,8 @@ export const AboutMeSection: React.FC = () => {
           <div className="w-full md:w-1/3 flex flex-col items-center">
             <div className="w-48 h-60 sm:w-56 sm:h-72 rounded-[2rem] border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-neutral-200">
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80"
-                alt="Bhumika Pagaria"
+                src={(portfolioData.personalInfo as any).profileImage || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80"}
+                alt={name}
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
               />
             </div>

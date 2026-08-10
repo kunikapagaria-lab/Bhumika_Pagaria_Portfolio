@@ -1,12 +1,17 @@
 import React from 'react';
 import { HeroIllustration } from './Illustrations';
 import { DoodleDownArrow } from './DoodleAccents';
+import { usePortfolio } from '../context/PortfolioContext';
 
 interface HeroSectionProps {
   onOpenContact?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = () => {
+  const portfolioData = usePortfolio();
+  const { name, role } = portfolioData.personalInfo;
+  const tagline = (portfolioData.personalInfo as any)?.tagline;
+
   return (
     <section id="hero" className="relative min-h-[calc(100vh-80px)] snap-start flex flex-col justify-center bg-white overflow-hidden py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -20,14 +25,14 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
             {/* Title */}
             <div className="relative inline-block">
               <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-none">
-                Bhumika Pagaria
+                {name || 'Bhumika Pagaria'}
               </h1>
             </div>
 
             {/* Sentence Casing Single Line Sub-Title */}
             <div className="pt-2">
               <span className="text-sm sm:text-base lg:text-lg font-light text-neutral-800 font-sans tracking-wide whitespace-nowrap block">
-                Multimedia Designer and Project Coordinator
+                {tagline || role || 'Multimedia Designer and Project Coordinator'}
               </span>
             </div>
 

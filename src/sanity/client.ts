@@ -55,8 +55,10 @@ export async function fetchSanityPortfolioData() {
 
     const personalQuery = `*[_type == "personalInfo"][0]{
       name,
+      nickname,
       tagline,
       bio,
+      education,
       "profileImage": profileImage.asset->url,
       "resumeFileUrl": resumeFile.asset->url,
       resumeUrl,
@@ -83,13 +85,30 @@ export async function fetchSanityPortfolioData() {
       sanityClient.fetch(testimonialsQuery),
     ]);
 
+    const rawProjects = Array.isArray(projects) && projects.length > 0 ? projects : PORTFOLIO_DATA.projects;
+    const sanitizedProjects = rawProjects.map((p: any) => ({
+      ...p,
+      tools: Array.isArray(p.tools) ? p.tools : ['Maya', 'Blender'],
+      breakdown: Array.isArray(p.breakdown) ? p.breakdown : []
+    }));
+
+    const rawServices = Array.isArray(services) && services.length > 0 ? services : PORTFOLIO_DATA.services;
+    const sanitizedServices = rawServices.map((s: any) => ({
+      ...s,
+      tags: Array.isArray(s.tags) ? s.tags : []
+    }));
+
     return {
       personalInfo: {
         name: personal?.name || PORTFOLIO_DATA.personalInfo.name,
+        nickname: personal?.nickname || (PORTFOLIO_DATA.personalInfo as any).nickname || 'Bhumu',
         role: PORTFOLIO_DATA.personalInfo.role,
         tagline: personal?.tagline || (PORTFOLIO_DATA.personalInfo as any).tagline || '',
         bio: personal?.bio || PORTFOLIO_DATA.personalInfo.bio,
-        location: (PORTFOLIO_DATA.personalInfo as any).location || '',
+        location: (PORTFOLIO_DATA.personalInfo as any).location || 'London, UK',
+        education: Array.isArray(personal?.education) && personal.education.length > 0 ? personal.education : PORTFOLIO_DATA.personalInfo.education,
+        tags: (PORTFOLIO_DATA.personalInfo as any).tags || [],
+        profileImage: personal?.profileImage || (PORTFOLIO_DATA.personalInfo as any).profileImage,
         resumeUrl: personal?.resumeFileUrl || personal?.resumeUrl || (PORTFOLIO_DATA.personalInfo as any).resumeUrl || '/bhumika_pagaria_cv.pdf',
         socialLinks: {
           vimeo: personal?.vimeoUrl || PORTFOLIO_DATA.personalInfo.socialLinks.vimeo,
@@ -98,12 +117,12 @@ export async function fetchSanityPortfolioData() {
           email: personal?.email || PORTFOLIO_DATA.personalInfo.socialLinks.email,
         }
       },
-      services: services && services.length > 0 ? services : PORTFOLIO_DATA.services,
-      projects: projects && projects.length > 0 ? projects : PORTFOLIO_DATA.projects,
-      skills: skills && skills.length > 0 ? skills.filter((s: any) => s.type !== 'soft') : PORTFOLIO_DATA.skills,
-      softSkills: skills && skills.length > 0 ? skills.filter((s: any) => s.type === 'soft') : (PORTFOLIO_DATA as any).softSkills,
-      testimonials: testimonials && testimonials.length > 0 ? testimonials : (PORTFOLIO_DATA as any).testimonials,
-      faqs: PORTFOLIO_DATA.faqs,
+      services: sanitizedServices,
+      projects: sanitizedProjects,
+      skills: Array.isArray(skills) && skills.length > 0 ? skills.filter((s: any) => s.type !== 'soft') : PORTFOLIO_DATA.skills,
+      softSkills: Array.isArray(skills) && skills.length > 0 ? skills.filter((s: any) => s.type === 'soft') : (PORTFOLIO_DATA as any).softSkills,
+      testimonials: Array.isArray(testimonials) && testimonials.length > 0 ? testimonials : (PORTFOLIO_DATA as any).testimonials,
+      faqs: PORTFOLIO_DATA.faqs || [],
     };
   } catch (error) {
     console.warn('Sanity CMS connection warning, using fallback portfolio data:', error);
