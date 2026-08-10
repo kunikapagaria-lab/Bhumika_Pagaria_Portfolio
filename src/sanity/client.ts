@@ -63,11 +63,21 @@ export async function fetchSanityPortfolioData() {
       email
     }`;
 
-    const [projects, services, skills, personal] = await Promise.all([
+    const testimonialsQuery = `*[_type == "testimonial"]{
+      "id": _id,
+      quote,
+      author,
+      role,
+      company,
+      rating
+    }`;
+
+    const [projects, services, skills, personal, testimonials] = await Promise.all([
       sanityClient.fetch(projectsQuery),
       sanityClient.fetch(servicesQuery),
       sanityClient.fetch(skillsQuery),
       sanityClient.fetch(personalQuery),
+      sanityClient.fetch(testimonialsQuery),
     ]);
 
     return {
@@ -89,6 +99,7 @@ export async function fetchSanityPortfolioData() {
       projects: projects && projects.length > 0 ? projects : PORTFOLIO_DATA.projects,
       skills: skills && skills.length > 0 ? skills.filter((s: any) => s.type !== 'soft') : PORTFOLIO_DATA.skills,
       softSkills: skills && skills.length > 0 ? skills.filter((s: any) => s.type === 'soft') : (PORTFOLIO_DATA as any).softSkills,
+      testimonials: testimonials && testimonials.length > 0 ? testimonials : (PORTFOLIO_DATA as any).testimonials,
       faqs: PORTFOLIO_DATA.faqs,
     };
   } catch (error) {
