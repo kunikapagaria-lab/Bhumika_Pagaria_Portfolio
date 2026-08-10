@@ -47,7 +47,9 @@ export async function fetchSanityPortfolioData() {
     }`;
 
     const skillsQuery = `*[_type == "skill"]{
+      "id": _id,
       name,
+      title,
       type
     }`;
 

@@ -1,8 +1,26 @@
 import React from 'react';
-import { Box, Palette, Sparkles, Layers, Cpu, Heart, Activity, Compass, Flame } from 'lucide-react';
+import { Box, Palette, Sparkles, Layers, Cpu, Heart, Activity, Compass, Flame, Code } from 'lucide-react';
+import { usePortfolio } from '../context/PortfolioContext';
+
+// Helper to match skill names to relevant icons
+const getSkillIcon = (name: string, type: string) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('blender')) return Box;
+  if (lower.includes('maya')) return Cpu;
+  if (lower.includes('zbrush')) return Flame;
+  if (lower.includes('after') || lower.includes('effects')) return Layers;
+  if (lower.includes('photo') || lower.includes('procreate') || lower.includes('illustrator')) return Palette;
+  if (lower.includes('substance') || lower.includes('painter')) return Sparkles;
+  if (lower.includes('performance')) return Heart;
+  if (lower.includes('mechanics') || lower.includes('physics')) return Activity;
+  if (lower.includes('direction') || lower.includes('creative')) return Compass;
+  return type === 'soft' ? Heart : Code;
+};
 
 export const SkillsSection: React.FC = () => {
-  const softwareCards = [
+  const portfolioData = usePortfolio();
+
+  const defaultSoftwareCards = [
     { id: 'maya', title: 'AUTODESK MAYA', icon: Cpu },
     { id: 'blender', title: 'BLENDER 3D', icon: Box },
     { id: 'zbrush', title: 'ZBRUSH SCULPTING', icon: Flame },
@@ -11,11 +29,27 @@ export const SkillsSection: React.FC = () => {
     { id: 'substance', title: 'SUBSTANCE PAINTER', icon: Sparkles }
   ];
 
-  const softSkillsCards = [
+  const defaultSoftSkillsCards = [
     { id: 'performance', title: 'CHARACTER PERFORMANCE', icon: Heart },
     { id: 'mechanics', title: 'BODY MECHANICS & PHYSICS', icon: Activity },
     { id: 'direction', title: 'CREATIVE DIRECTION', icon: Compass }
   ];
+
+  // Dynamically map skills from Sanity CMS if available
+  const sanitySoftwareSkills = (portfolioData.skills || []).map((s: any, idx: number) => ({
+    id: s.id || s._id || `sanity-soft-${idx}`,
+    title: (s.name || s.title || s.name || '').toUpperCase(),
+    icon: getSkillIcon(s.name || s.title || '', 'software')
+  }));
+
+  const sanitySoftSkills = ((portfolioData as any).softSkills || []).map((s: any, idx: number) => ({
+    id: s.id || s._id || `sanity-softskill-${idx}`,
+    title: (s.name || s.title || s.name || '').toUpperCase(),
+    icon: getSkillIcon(s.name || s.title || '', 'soft')
+  }));
+
+  const softwareCards = sanitySoftwareSkills.length > 0 ? sanitySoftwareSkills : defaultSoftwareCards;
+  const softSkillsCards = sanitySoftSkills.length > 0 ? sanitySoftSkills : defaultSoftSkillsCards;
 
   return (
     <section id="skills" className="min-h-screen snap-start flex flex-col justify-center py-16 md:py-20 bg-white text-black relative overflow-hidden border-t-2 border-black">
@@ -54,8 +88,8 @@ export const SkillsSection: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
-            {softwareCards.map((card) => {
-              const IconComponent = card.icon;
+            {softwareCards.map((card: any) => {
+              const IconComponent = card.icon || Code;
               return (
                 <div
                   key={card.id}
@@ -84,8 +118,8 @@ export const SkillsSection: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
-            {softSkillsCards.map((card) => {
-              const IconComponent = card.icon;
+            {softSkillsCards.map((card: any) => {
+              const IconComponent = card.icon || Heart;
               return (
                 <div
                   key={card.id}
