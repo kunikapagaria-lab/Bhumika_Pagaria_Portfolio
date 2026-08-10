@@ -25,7 +25,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
     try {
       // Web3Forms API endpoint (Delivers directly to bhumikapagaria@gmail.com)
-      const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || '5b35a8eb-843e-4d43-bd32-84b26059c4ff';
+      const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || 'ccb8f6c7-2f3e-4e95-ae81-6eb18001f268';
 
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
