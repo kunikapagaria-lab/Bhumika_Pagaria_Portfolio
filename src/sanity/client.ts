@@ -16,6 +16,25 @@ export function urlFor(source: any) {
   return builder.image(source);
 }
 
+// Helper to safely extract string text from plain strings or Sanity Portable Text blocks
+function extractText(val: any): string {
+  if (!val) return '';
+  if (typeof val === 'string') return val;
+  if (Array.isArray(val)) {
+    return val
+      .map((block: any) => {
+        if (typeof block === 'string') return block;
+        if (block?._type === 'block' && Array.isArray(block.children)) {
+          return block.children.map((child: any) => child.text || '').join('');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join('\n\n');
+  }
+  return '';
+}
+
 // Fetch all portfolio data from Sanity CMS with automatic fallback to PORTFOLIO_DATA
 export async function fetchSanityPortfolioData() {
   try {
@@ -53,7 +72,7 @@ export async function fetchSanityPortfolioData() {
       type
     }`;
 
-    const personalQuery = `*[_type == "personalInfo"][0]{
+    const personalQuery = `*[_type in ["personalInfo", "personal", "about"]][0]{
       name,
       nickname,
       tagline,
@@ -88,6 +107,7 @@ export async function fetchSanityPortfolioData() {
     const rawProjects = Array.isArray(projects) && projects.length > 0 ? projects : PORTFOLIO_DATA.projects;
     const sanitizedProjects = rawProjects.map((p: any) => ({
       ...p,
+      description: extractText(p.description) || p.description,
       tools: Array.isArray(p.tools) ? p.tools : ['Maya', 'Blender'],
       breakdown: Array.isArray(p.breakdown) ? p.breakdown : []
     }));
@@ -95,18 +115,23 @@ export async function fetchSanityPortfolioData() {
     const rawServices = Array.isArray(services) && services.length > 0 ? services : PORTFOLIO_DATA.services;
     const sanitizedServices = rawServices.map((s: any) => ({
       ...s,
+      description: extractText(s.description) || s.description,
       tags: Array.isArray(s.tags) ? s.tags : []
     }));
+
+    const bioText = extractText(personal?.bio);
 
     return {
       personalInfo: {
         name: personal?.name || PORTFOLIO_DATA.personalInfo.name,
-        nickname: personal?.nickname || (PORTFOLIO_DATA.personalInfo as any).nickname || 'Bhumu',
+        nickname: personal?.nickname || (PORTFOLIO_DATA.personalInfo as any).nickname || '',
         role: PORTFOLIO_DATA.personalInfo.role,
         tagline: personal?.tagline || (PORTFOLIO_DATA.personalInfo as any).tagline || '',
-        bio: personal?.bio || PORTFOLIO_DATA.personalInfo.bio,
+        bio: bioText || PORTFOLIO_DATA.personalInfo.bio,
         location: (PORTFOLIO_DATA.personalInfo as any).location || 'London, UK',
-        education: Array.isArray(personal?.education) && personal.education.length > 0 ? personal.education : PORTFOLIO_DATA.personalInfo.education,
+        education: Array.isArray(personal?.education) && personal.education.length > 0 
+          ? personal.education.map((e: any) => extractText(e) || e) 
+          : PORTFOLIO_DATA.personalInfo.education,
         tags: (PORTFOLIO_DATA.personalInfo as any).tags || [],
         profileImage: personal?.profileImage || (PORTFOLIO_DATA.personalInfo as any).profileImage,
         resumeUrl: personal?.resumeFileUrl || personal?.resumeUrl || (PORTFOLIO_DATA.personalInfo as any).resumeUrl || '/bhumika_pagaria_cv.pdf',
