@@ -72,8 +72,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white text-black rounded-[2.5rem] border-2 border-black w-full max-w-lg p-6 sm:p-10 relative shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white text-black rounded-3xl sm:rounded-[2.5rem] border-2 border-black w-full max-w-lg max-h-[88vh] overflow-y-auto p-5 sm:p-8 sm:p-10 relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] my-auto box-border"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         <button
           onClick={onClose}

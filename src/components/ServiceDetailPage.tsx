@@ -166,8 +166,14 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service })
 
       {/* Full Record Dialog Modal */}
       {activeProjectModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white text-black rounded-[2.5rem] border-2 border-black w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-10 relative shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto"
+          onClick={() => setActiveProjectModal(null)}
+        >
+          <div 
+            className="bg-white text-black rounded-3xl sm:rounded-[2.5rem] border-2 border-black w-full max-w-2xl lg:max-w-3xl max-h-[88vh] overflow-y-auto p-5 sm:p-8 sm:p-10 relative shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] my-auto box-border"
+            onClick={(e) => e.stopPropagation()}
+          >
             
             {/* Close Modal Button */}
             <button
