@@ -11,7 +11,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    projectType: '3D Animation',
     message: ''
   });
   const [loading, setLoading] = useState(false);
@@ -37,8 +36,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           access_key: accessKey,
           name: formData.name,
           email: formData.email,
-          subject: `Portfolio Inquiry: ${formData.projectType} from ${formData.name}`,
-          message: `Client Name: ${formData.name}\nClient Email: ${formData.email}\nProject Category: ${formData.projectType}\n\nMessage:\n${formData.message}`,
+          subject: `Portfolio Inquiry from ${formData.name}`,
+          message: `Client Name: ${formData.name}\nClient Email: ${formData.email}\n\nMessage:\n${formData.message}`,
           to_email: 'bhumikapagaria@gmail.com'
         })
       });
@@ -65,7 +64,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
       setLoading(false);
       setTimeout(() => {
         setSubmitted(false);
-        setFormData({ name: '', email: '', projectType: '3D Animation', message: '' });
+        setFormData({ name: '', email: '', message: '' });
         onClose();
       }, 3500);
     }
@@ -133,21 +132,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border-2 border-black bg-neutral-50 text-black text-sm focus:outline-none focus:bg-white focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
                 />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1">Project Type</label>
-                <select
-                  value={formData.projectType}
-                  onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-black bg-neutral-50 text-black text-sm focus:outline-none focus:bg-white focus:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
-                >
-                  <option value="3D Animation">3D Character Animation</option>
-                  <option value="3D Modelling">3D Prop / Asset Modelling</option>
-                  <option value="2D Animation">2D Animation & Storyboarding</option>
-                  <option value="Illustrations">Digital Art & Illustrations</option>
-                  <option value="General Inquiry">General Freelance / Studio Role</option>
-                </select>
               </div>
 
               <div>
