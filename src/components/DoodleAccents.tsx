@@ -56,24 +56,17 @@ export const DoodleDownArrow: React.FC<{ className?: string }> = ({ className = 
   );
 };
 
-// Hand-Doodled Cascading Scroll-Down Chevrons (3 pencil-sketched V marks, pulsing downward in sequence)
-export const DoodleScrollChevrons: React.FC<{ className?: string }> = ({ className = "w-8 h-14" }) => {
-  const chevronTops = [4, 22, 40];
+// Hand-Doodled Single Scroll-Down Chevron, static (no animation)
+export const DoodleScrollChevron: React.FC<{ className?: string }> = ({ className = "w-12 h-9" }) => {
   return (
-    <svg className={className} viewBox="0 0 30 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {chevronTops.map((y, i) => (
-        <motion.path
-          key={y}
-          d={`M6 ${y} C 10 ${y + 6}, 13 ${y + 9}, 15 ${y + 11} C 17 ${y + 9}, 20 ${y + 6}, 24 ${y}`}
-          stroke="#000000"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ opacity: 0.15 }}
-          animate={{ opacity: [0.15, 1, 0.15] }}
-          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.25 }}
-        />
-      ))}
+    <svg className={className} viewBox="0 0 30 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M3 3 C 8 11, 12 16, 15 19 C 18 16, 22 11, 27 3"
+        stroke="#000000"
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 };

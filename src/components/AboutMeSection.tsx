@@ -6,7 +6,7 @@ export const AboutMeSection: React.FC = () => {
   const { name, nickname, bio, tags, education } = portfolioData.personalInfo;
 
   return (
-    <section id="about" className="min-h-screen snap-start flex flex-col justify-center py-20 md:py-24 bg-white border-t border-neutral-200">
+    <section id="about" className="snap-start scroll-mt-20 pt-8 pb-16 md:pt-10 md:pb-20 bg-white border-t border-neutral-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header (about me) */}

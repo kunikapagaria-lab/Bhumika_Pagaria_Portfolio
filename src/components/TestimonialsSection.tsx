@@ -40,7 +40,7 @@ export const TestimonialsSection: React.FC = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-20 md:py-28 bg-white text-black relative overflow-hidden border-t-2 border-black">
+    <section id="testimonials" className="pt-8 pb-20 md:pt-10 md:pb-28 bg-white text-black relative overflow-hidden border-t-2 border-black">
       
       {/* Subtle Sketchy Dot Grid Background Pattern */}
       <div 

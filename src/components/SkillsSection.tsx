@@ -52,7 +52,7 @@ export const SkillsSection: React.FC = () => {
   const softSkillsCards = sanitySoftSkills.length > 0 ? sanitySoftSkills : defaultSoftSkillsCards;
 
   return (
-    <section id="skills" className="min-h-screen snap-start flex flex-col justify-center py-16 md:py-20 bg-white text-black relative overflow-hidden border-t-2 border-black">
+    <section id="skills" className="snap-start scroll-mt-20 pt-8 pb-16 md:pt-10 md:pb-20 bg-white text-black relative overflow-hidden border-t-2 border-black">
       
       {/* Subtle Sketchy Dot Grid Canvas Pattern */}
       <div 

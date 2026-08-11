@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { type Project } from '../data/portfolioData';
 import { ExternalLink, CheckCircle2 } from 'lucide-react';
 import { FullscreenButton } from './FullscreenButton';
@@ -7,8 +8,48 @@ interface ProjectDetailPageProps {
   project: Project;
 }
 
+// A full-bleed image block within the rich report — its own fullscreen button, same as
+// every other photo on the site.
+const ReportImage: React.FC<{ value: { asset?: { url?: string }; alt?: string } }> = ({ value }) => {
+  const ref = useRef<HTMLImageElement>(null);
+  const url = value?.asset?.url;
+  if (!url) return null;
+
+  return (
+    <div className="rounded-2xl border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative my-2">
+      <img ref={ref} src={url} alt={value.alt || ''} className="w-full h-auto" />
+      <FullscreenButton getTarget={() => ref.current} className="absolute top-3 right-3 z-10" />
+    </div>
+  );
+};
+
+const reportComponents: PortableTextComponents = {
+  types: {
+    image: ({ value }) => <ReportImage value={value} />,
+  },
+  block: {
+    h2: ({ children }) => (
+      <h2 className="font-display text-2xl sm:text-3xl font-black tracking-tight text-black mt-8 mb-3">{children}</h2>
+    ),
+    h3: ({ children }) => (
+      <h3 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-black mt-6 mb-2">{children}</h3>
+    ),
+    normal: ({ children }) => (
+      <p className="text-neutral-800 text-base leading-relaxed mb-4">{children}</p>
+    ),
+    blockquote: ({ children }) => (
+      <blockquote className="border-l-4 border-black pl-4 italic text-neutral-600 my-4">{children}</blockquote>
+    ),
+  },
+  list: {
+    bullet: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-4 text-neutral-800">{children}</ul>,
+    number: ({ children }) => <ol className="list-decimal list-inside space-y-1 mb-4 text-neutral-800">{children}</ol>,
+  },
+};
+
 export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project }) => {
   const imgRef = useRef<HTMLImageElement>(null);
+  const galleryRefs = useRef<Record<number, HTMLImageElement | null>>({});
 
   return (
     <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 pt-24 pb-16">
@@ -44,6 +85,18 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
             <p>{project.description}</p>
           </div>
 
+          {/* Full Report — headings, paragraphs, and photos, written in Sanity like a document */}
+          {project.fullReport && project.fullReport.length > 0 && (
+            <div>
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
+                Full Report
+              </h4>
+              <div className="bg-white p-5 sm:p-8 rounded-2xl border border-neutral-200">
+                <PortableText value={project.fullReport} components={reportComponents} />
+              </div>
+            </div>
+          )}
+
           {project.breakdown && project.breakdown.length > 0 && (
             <div>
               <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
@@ -54,6 +107,31 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
                   <div key={idx} className="flex items-start gap-2.5 text-sm sm:text-base text-neutral-700 bg-white p-3 rounded-xl border border-neutral-200">
                     <CheckCircle2 className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
                     <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Photo Gallery — as many extra photos as have been added in Sanity */}
+          {project.gallery && project.gallery.length > 0 && (
+            <div>
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
+                Gallery
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {project.gallery.map((photo, idx) => (
+                  <div key={idx} className="relative aspect-square rounded-xl border-2 border-black overflow-hidden bg-neutral-100 group">
+                    <img
+                      ref={(el) => { galleryRefs.current[idx] = el; }}
+                      src={photo.url}
+                      alt={photo.alt || `${project.title} photo ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <FullscreenButton
+                      getTarget={() => galleryRefs.current[idx]}
+                      className="absolute top-2 right-2 z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                    />
                   </div>
                 ))}
               </div>

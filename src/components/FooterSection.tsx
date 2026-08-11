@@ -32,21 +32,34 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
   const [lineWidth, setLineWidth] = useState(4);
   const [drawMode, setDrawMode] = useState(false);
 
-  // Resize canvas to fill the bounded doodle box (not the whole footer)
+  // Resize canvas to fill the bounded doodle box (not the whole footer). Uses a
+  // ResizeObserver on the box itself — not just a window resize listener — because the
+  // box's actual size can change for reasons that never fire a window resize event (its
+  // height is in vh units, content above it can reflow, mobile browser chrome can show/hide).
+  // If the canvas's drawing buffer falls out of sync with the box's real size, the canvas
+  // ends up stretching a mis-sized buffer to fit, which is exactly what shifts where a
+  // stroke actually lands relative to where the cursor is.
   useEffect(() => {
     const handleResize = () => {
       const canvas = canvasRef.current;
-      const box = boxRef.current;
-      if (canvas && box) {
-        const rect = box.getBoundingClientRect();
+      if (canvas) {
+        const rect = canvas.getBoundingClientRect();
         canvas.width = rect.width * window.devicePixelRatio;
         canvas.height = rect.height * window.devicePixelRatio;
       }
     };
 
     handleResize();
+
+    const box = boxRef.current;
+    const observer = box ? new ResizeObserver(handleResize) : null;
+    if (box && observer) observer.observe(box);
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      observer?.disconnect();
+    };
   }, []);
 
   // Animation Loop: Render strokes
@@ -155,11 +168,11 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
   };
 
   return (
-    <footer id="doodle-canvas" className="bg-white text-black py-16 md:py-20 relative overflow-hidden border-t-2 border-black">
+    <footer id="doodle-canvas" className="bg-white text-black pt-16 pb-6 md:pt-20 md:pb-8 relative overflow-hidden border-t-2 border-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
 
         {/* Contained Doodle Box: drawing only happens inside this box, and only while pencil mode is on */}
-        <div className="mb-16">
+        <div className="mb-8">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <h3 className="font-display text-xl sm:text-2xl font-black text-black">
               leave a little doodle ✏️
@@ -236,7 +249,7 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
 
           <div
             ref={boxRef}
-            className="relative w-full h-[70vh] sm:h-[75vh] rounded-3xl border-2 border-black bg-neutral-50 overflow-hidden"
+            className="relative w-full h-[58vh] sm:h-[62vh] rounded-3xl border-2 border-black bg-neutral-50 overflow-hidden"
           >
             <canvas
               ref={canvasRef}

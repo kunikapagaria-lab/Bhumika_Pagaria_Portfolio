@@ -1,6 +1,6 @@
 import React from 'react';
 import { HeroIllustration } from './Illustrations';
-import { DoodleScrollChevrons } from './DoodleAccents';
+import { DoodleScrollChevron } from './DoodleAccents';
 import { usePortfolio } from '../context/PortfolioContext';
 
 interface HeroSectionProps {
@@ -13,7 +13,7 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
   const tagline = (portfolioData.personalInfo as any)?.tagline;
 
   return (
-    <section id="hero" className="relative min-h-[calc(100vh-80px)] snap-start flex flex-col justify-center bg-white overflow-hidden py-12 md:py-16">
+    <section id="hero" className="relative min-h-[calc(100vh-80px)] snap-start scroll-mt-20 flex flex-col justify-center bg-white overflow-hidden py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Main Grid: Title & Clean Typography on Left, Character Illustration on Right */}
@@ -49,9 +49,9 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
 
       </div>
 
-      {/* Bottom Center Self-Drawing Pencil Scroll Chevrons */}
+      {/* Bottom Center Self-Drawing Pencil Scroll Chevron */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:bottom-10 z-20">
-        <DoodleScrollChevrons className="w-8 h-14" />
+        <DoodleScrollChevron className="w-12 h-9" />
       </div>
     </section>
   );

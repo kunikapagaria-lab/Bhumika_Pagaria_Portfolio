@@ -51,7 +51,7 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
   };
 
   return (
-    <section id="cases" className="min-h-screen snap-start flex flex-col justify-center py-16 md:py-20 bg-black text-white relative overflow-hidden">
+    <section id="cases" className="snap-start scroll-mt-20 pt-8 pb-28 md:pt-10 md:pb-36 bg-black text-white relative overflow-hidden">
       
       {/* Floating Edge Navigation Arrows */}
       <button
@@ -235,7 +235,7 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
 
                   <FullscreenButton
                     getTarget={() => posterImgRef.current}
-                    className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-4 right-4 z-20 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                   />
 
                   {/* Poster Overlay Title */}

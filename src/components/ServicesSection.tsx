@@ -31,7 +31,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   };
 
   return (
-    <section id="services" className="min-h-screen snap-start flex flex-col justify-center py-20 md:py-24 bg-white border-t border-neutral-200 relative overflow-hidden">
+    <section id="services" className="snap-start scroll-mt-20 pt-8 pb-28 md:pt-10 md:pb-36 bg-white border-t border-neutral-200 relative overflow-hidden">
       
       {/* Pure Visual Full-Screen Card Expansion Zoom */}
       <AnimatePresence>
@@ -70,7 +70,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Heading matching (services) format */}
-        <div className="mb-14 sm:mb-16 relative inline-block">
+        <div className="mb-10 sm:mb-12 relative inline-block">
           <div className="flex items-center gap-2">
             <span className="font-display text-2xl sm:text-3xl font-light tracking-tight text-neutral-400">
               (services)
@@ -83,14 +83,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         </div>
 
         {/* Large 6 Service Cards Grid (3x2) with Background Artwork & Black Fade-Down Header */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 relative">
           {portfolioData.services.map((service) => (
             <div
               key={service.id}
               role="button"
               tabIndex={0}
               aria-label={`Open ${service.title} service`}
-              className={`card-editorial flex flex-col justify-between group cursor-pointer relative overflow-hidden p-10 sm:p-12 min-h-[270px] sm:min-h-[285px] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
+              className={`card-editorial flex flex-col justify-between group cursor-pointer relative overflow-hidden p-8 sm:p-10 min-h-[220px] sm:min-h-[235px] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
                 service.bgImage ? 'bg-black text-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]' : 'bg-white'
               }`}
               onClick={() => handleCardClick(service)}

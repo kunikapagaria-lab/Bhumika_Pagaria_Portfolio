@@ -53,6 +53,14 @@ export async function fetchSanityPortfolioData() {
       videoUrl,
       "imageUrl": mainImage.asset->url,
       breakdown,
+      "gallery": gallery[]{ "url": asset->url, alt },
+      fullReport[]{
+        ...,
+        _type == "image" => {
+          ...,
+          "asset": asset->
+        }
+      },
       isHighlight,
       link
     }`;
@@ -111,7 +119,8 @@ export async function fetchSanityPortfolioData() {
       ...p,
       description: extractText(p.description) || p.description,
       tools: Array.isArray(p.tools) ? p.tools : ['Maya', 'Blender'],
-      breakdown: Array.isArray(p.breakdown) ? p.breakdown : []
+      breakdown: Array.isArray(p.breakdown) ? p.breakdown : [],
+      gallery: Array.isArray(p.gallery) ? p.gallery : []
     }));
 
     const rawServices = Array.isArray(services) && services.length > 0 ? services : PORTFOLIO_DATA.services;

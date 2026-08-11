@@ -25,6 +25,31 @@ export const projectSchema = {
     { name: 'videoUrl', title: 'Vimeo Video URL', type: 'url', description: 'e.g. https://player.vimeo.com/video/641042738' },
     { name: 'tools', title: 'Software & Tools Used', type: 'array', of: [{ type: 'string' }] },
     { name: 'breakdown', title: 'Breakdown Points', type: 'array', of: [{ type: 'string' }] },
+    {
+      name: 'gallery',
+      title: 'Photo Gallery',
+      description: 'Add as many extra photos of this project as you want — shown as a gallery on the project page.',
+      type: 'array',
+      of: [{
+        type: 'image',
+        options: { hotspot: true },
+        fields: [{ name: 'alt', title: 'Alt Text (for accessibility)', type: 'string' }],
+      }],
+    },
+    {
+      name: 'fullReport',
+      title: 'Full Report',
+      description: 'The full write-up for this project — write headings, paragraphs, bullet points, and drop photos in wherever you want, like a document.',
+      type: 'array',
+      of: [
+        { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [{ name: 'alt', title: 'Alt Text (for accessibility)', type: 'string' }],
+        },
+      ],
+    },
     { name: 'isHighlight', title: 'Show in Hero Carousel Highlights?', type: 'boolean' },
     { name: 'link', title: 'External Link / Case Study URL', type: 'url' }
   ]

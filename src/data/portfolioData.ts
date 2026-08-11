@@ -9,6 +9,12 @@ export interface Project {
   imageUrl: string;
   breakdown: string[];
   link?: string;
+  // Extra photos shown as a gallery on the project page (Sanity only — empty until added there).
+  gallery?: { url: string; alt?: string }[];
+  // The full write-up for this project (Sanity Portable Text — headings, paragraphs, and
+  // images mixed together, like a document). Untyped since Portable Text's shape is defined
+  // by Sanity, not by this app.
+  fullReport?: any[];
 }
 
 export interface Service {

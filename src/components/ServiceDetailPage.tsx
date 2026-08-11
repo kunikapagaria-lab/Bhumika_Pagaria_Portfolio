@@ -170,7 +170,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
 
                           <FullscreenButton
                             getTarget={() => mediaRefs.current[project.id]}
-                            className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute top-4 right-4 z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                           />
 
                           {/* Play Button Overlay if Vimeo Video is Available */}
