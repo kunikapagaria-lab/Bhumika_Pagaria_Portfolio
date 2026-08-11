@@ -9,6 +9,7 @@ import { TestimonialsSection } from './components/TestimonialsSection';
 import { FooterSection } from './components/FooterSection';
 import { ContactModal } from './components/ContactModal';
 import { DoodleClickEffect } from './components/DoodleClickEffect';
+import { SmoothScroll } from './components/SmoothScroll';
 import { ServiceDetailPage } from './components/ServiceDetailPage';
 import { ProjectDetailPage } from './components/ProjectDetailPage';
 import { type Service, type Project } from './data/portfolioData';
@@ -119,6 +120,7 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-white text-black font-sans antialiased selection:bg-black selection:text-white relative overflow-x-hidden pt-20">
+      <SmoothScroll />
       <DoodleClickEffect />
 
       {/* Persistent Fixed Navbar Header */}
