@@ -95,7 +95,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             </div>
             <h3 className="font-display text-3xl font-black">message received!</h3>
             <p className="text-neutral-600 text-sm leading-relaxed">
-              Thank you for reaching out, <span className="font-bold text-black">{formData.name || 'friend'}</span>. Your inquiry has been sent to <span className="font-bold text-black font-mono">bhumikapagaria@gmail.com</span> and Bhumika will reply to you shortly!
+              Thank you for reaching out, <span className="font-bold text-black">{formData.name || 'friend'}</span>. Your inquiry has been sent to <span className="font-bold text-black">Bhumika Pagaria</span> and she will reply to you shortly!
             </p>
           </div>
         ) : (
