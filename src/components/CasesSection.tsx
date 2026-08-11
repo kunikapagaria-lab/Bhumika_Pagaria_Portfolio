@@ -156,7 +156,7 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
               {/* RIGHT COLUMN: 3D Tilted "Coming Out" Poster Card with Floating Doodle Sparkle Array */}
               <div className="lg:col-span-5 flex justify-center lg:justify-end [perspective:1200px] relative group">
                 
-                {/* Organic Naturally Scattered Doodle Stars Galaxy (16 elements with varied rotations, opacities & scale) */}
+                {/* Organic Naturally Scattered Doodle Stars Galaxy (14 elements with varied rotations, opacities & scale) */}
                 <div className="absolute -top-16 -right-12 z-30 pointer-events-none rotate-12 opacity-95">
                   <DoodleStar className="w-11 h-11 text-white animate-pulse" />
                 </div>
@@ -201,12 +201,6 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                 </div>
                 <div className="absolute -top-6 right-1/3 z-30 pointer-events-none -rotate-15 opacity-70">
                   <DoodleStar className="w-4 h-4 text-white animate-pulse delay-300" />
-                </div>
-                <div className="absolute -bottom-6 -left-6 z-30 pointer-events-none rotate-60 opacity-60">
-                  <DoodleSparkle className="w-4 h-4 text-white animate-pulse delay-200" />
-                </div>
-                <div className="absolute -bottom-8 left-1/3 z-30 pointer-events-none -rotate-20 opacity-75">
-                  <DoodleStar className="w-6 h-6 text-white animate-pulse delay-100" />
                 </div>
 
                 <div
