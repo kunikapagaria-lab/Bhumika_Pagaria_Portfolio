@@ -27,11 +27,9 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
   // Match projects using the service's categoryTag (Sanity gives every document its own
   // random id, so id can't be relied on to match a project's category — see Service type).
   const matchKey = service.categoryTag || service.id;
-  const categoryProjects = portfolioData.projects.filter(
+  const displayProjects = portfolioData.projects.filter(
     (p) => p.category === matchKey
   );
-
-  const displayProjects = categoryProjects.length > 0 ? categoryProjects : portfolioData.projects;
 
   return (
     <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 flex flex-col justify-between pt-24 pb-16">
@@ -61,6 +59,12 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
           <div className="w-full h-px bg-neutral-300/70 my-12 sm:my-16" />
 
           {/* Alternating Project Showcase Rows for ALL Services */}
+          {displayProjects.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-lg sm:text-xl font-medium text-neutral-500">No projects in this category yet.</p>
+              <p className="text-sm text-neutral-400 mt-2">Check back soon — more work is on the way.</p>
+            </div>
+          ) : (
           <div className="space-y-20 sm:space-y-28">
             {displayProjects.map((project, index) => {
               const isEven = index % 2 === 0;
@@ -190,6 +194,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
               );
             })}
           </div>
+          )}
 
         </div>
       </main>
