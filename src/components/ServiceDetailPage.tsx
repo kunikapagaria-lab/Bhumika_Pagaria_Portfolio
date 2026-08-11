@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { type Service, type Project } from '../data/portfolioData';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 import { ExternalLink, Play } from 'lucide-react';
 import { DoodleStar } from './DoodleAccents';
 import { FullscreenButton } from './FullscreenButton';

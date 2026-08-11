@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 import { Eraser, Pencil } from 'lucide-react';
 
 interface FooterSectionProps {

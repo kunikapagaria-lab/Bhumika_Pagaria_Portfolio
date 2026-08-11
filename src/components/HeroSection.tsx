@@ -1,7 +1,7 @@
 import React from 'react';
 import { HeroIllustration } from './Illustrations';
 import { DoodleScrollChevron } from './DoodleAccents';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 
 interface HeroSectionProps {
   onOpenContact?: () => void;

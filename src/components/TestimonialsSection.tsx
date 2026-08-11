@@ -1,6 +1,6 @@
 import React from 'react';
 import { Quote, Star } from 'lucide-react';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 
 export const TestimonialsSection: React.FC = () => {
   const portfolioData = usePortfolio();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { type Project } from '../data/portfolioData';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DoodleStar, DoodleSparkle } from './DoodleAccents';

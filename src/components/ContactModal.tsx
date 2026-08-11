@@ -56,7 +56,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
         window.location.href = `mailto:bhumikapagaria@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message)}`;
         setSubmitted(true);
       }
-    } catch (err) {
+    } catch {
       // Offline / network fallback trigger
       window.location.href = `mailto:bhumikapagaria@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message)}`;
       setSubmitted(true);

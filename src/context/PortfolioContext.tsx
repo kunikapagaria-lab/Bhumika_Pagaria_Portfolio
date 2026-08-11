@@ -1,8 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
 import { fetchSanityPortfolioData } from '../sanity/client';
-
-const PortfolioContext = createContext(PORTFOLIO_DATA);
+import { PortfolioContext } from './usePortfolio';
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [data, setData] = useState(PORTFOLIO_DATA);
@@ -21,5 +20,3 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     </PortfolioContext.Provider>
   );
 };
-
-export const usePortfolio = () => useContext(PortfolioContext);

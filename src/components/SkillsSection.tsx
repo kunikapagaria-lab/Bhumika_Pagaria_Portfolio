@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Palette, Sparkles, Layers, Cpu, Heart, Activity, Compass, Flame, Code } from 'lucide-react';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 
 // Helper to match skill names to relevant icons
 const getSkillIcon = (name: string, type: string) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 
 export const AboutMeSection: React.FC = () => {
   const portfolioData = usePortfolio();

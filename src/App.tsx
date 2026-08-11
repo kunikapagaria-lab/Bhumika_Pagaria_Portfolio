@@ -13,7 +13,7 @@ import { SmoothScroll } from './components/SmoothScroll';
 import { ServiceDetailPage } from './components/ServiceDetailPage';
 import { ProjectDetailPage } from './components/ProjectDetailPage';
 import { type Service, type Project } from './data/portfolioData';
-import { usePortfolio } from './context/PortfolioContext';
+import { usePortfolio } from './context/usePortfolio';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Service and project detail pages live at #service-<id> / #project-<id> in the URL, so the

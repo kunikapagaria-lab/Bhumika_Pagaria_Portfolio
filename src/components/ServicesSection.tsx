@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { type Service } from '../data/portfolioData';
-import { usePortfolio } from '../context/PortfolioContext';
+import { usePortfolio } from '../context/usePortfolio';
 import { DoodleStar, DoodleSquiggle } from './DoodleAccents';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
