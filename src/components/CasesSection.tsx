@@ -29,11 +29,13 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
     ? portfolioData.projects 
     : portfolioData.projects.filter(p => p.category === selectedCategory);
 
-  const currentProject = filteredProjects[activeProjectIndex % filteredProjects.length] || filteredProjects[0];
+  const currentProject = filteredProjects.length > 0
+    ? filteredProjects[activeProjectIndex % filteredProjects.length] || filteredProjects[0]
+    : null;
 
   // Automatic Carousel Loop: Automatically changes to next highlight every 4.5s
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || filteredProjects.length === 0) return;
 
     const timer = setInterval(() => {
       setActiveProjectIndex((prev) => (prev + 1) % filteredProjects.length);
@@ -111,6 +113,12 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
           onMouseLeave={() => setIsPaused(false)}
         >
           
+          {!currentProject ? (
+            <div className="w-full text-center py-16">
+              <p className="text-lg sm:text-xl font-medium text-neutral-400">No projects in this category yet.</p>
+              <p className="text-sm text-neutral-600 mt-2">Check back soon — more work is on the way.</p>
+            </div>
+          ) : (
           <AnimatePresence mode="wait">
             <motion.div
               key={currentProject.id}
@@ -248,6 +256,7 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
 
             </motion.div>
           </AnimatePresence>
+          )}
 
         </div>
 
