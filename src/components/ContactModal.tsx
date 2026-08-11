@@ -23,7 +23,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     setLoading(true);
 
     try {
-      // Web3Forms API endpoint (Delivers directly to bhumikapagaria@gmail.com)
+      // Web3Forms API endpoint (Delivers directly to pagariabhumika@gmail.com)
       const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || 'ccb8f6c7-2f3e-4e95-ae81-6eb18001f268';
 
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -38,7 +38,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           email: formData.email,
           subject: `Portfolio Inquiry from ${formData.name}`,
           message: `Client Name: ${formData.name}\nClient Email: ${formData.email}\n\nMessage:\n${formData.message}`,
-          to_email: 'bhumikapagaria@gmail.com'
+          to_email: 'pagariabhumika@gmail.com'
         })
       });
 
@@ -53,12 +53,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
         });
       } else {
         // Mailto fallback trigger
-        window.location.href = `mailto:bhumikapagaria@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message)}`;
+        window.location.href = `mailto:pagariabhumika@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message)}`;
         setSubmitted(true);
       }
     } catch {
       // Offline / network fallback trigger
-      window.location.href = `mailto:bhumikapagaria@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message)}`;
+      window.location.href = `mailto:pagariabhumika@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message)}`;
       setSubmitted(true);
     } finally {
       setLoading(false);
