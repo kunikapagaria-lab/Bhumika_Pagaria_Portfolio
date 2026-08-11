@@ -1,6 +1,6 @@
 import React from 'react';
 import { HeroIllustration } from './Illustrations';
-import { DoodleDownArrow } from './DoodleAccents';
+import { DoodleScrollChevrons } from './DoodleAccents';
 import { usePortfolio } from '../context/PortfolioContext';
 
 interface HeroSectionProps {
@@ -24,14 +24,16 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
             
             {/* Title */}
             <div className="relative inline-block">
-              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-none">
+              {/* id used by the nav bar to know exactly when this heading has scrolled out of view */}
+              <h1 id="hero-name" className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-neutral-900 leading-none">
                 {name || 'Bhumika Pagaria'}
               </h1>
             </div>
 
             {/* Sentence Casing Single Line Sub-Title */}
             <div className="pt-2">
-              <span className="text-sm sm:text-base lg:text-lg font-light text-neutral-800 font-sans tracking-wide whitespace-nowrap block">
+              {/* Small left nudge to compensate for this font's wider left side-bearing vs the heading font, so the "M" visually lines up under the "B" above it */}
+              <span className="text-sm sm:text-base lg:text-lg font-light text-neutral-800 font-sans tracking-wide whitespace-nowrap block pl-1">
                 {tagline || role || 'Multimedia Designer and Project Coordinator'}
               </span>
             </div>
@@ -47,9 +49,9 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
 
       </div>
 
-      {/* Bottom Left Corner Self-Drawing Pencil Down Arrow */}
-      <div className="absolute bottom-6 left-8 md:bottom-10 md:left-12 z-20">
-        <DoodleDownArrow className="w-8 h-12" />
+      {/* Bottom Center Self-Drawing Pencil Scroll Chevrons */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:bottom-10 z-20">
+        <DoodleScrollChevrons className="w-8 h-14" />
       </div>
     </section>
   );

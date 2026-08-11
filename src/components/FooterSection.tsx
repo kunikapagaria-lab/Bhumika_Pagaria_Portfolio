@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
-import { Eraser } from 'lucide-react';
+import { Eraser, Pencil } from 'lucide-react';
 
 interface FooterSectionProps {
   onOpenContact?: () => void;
@@ -22,6 +22,7 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
   const portfolioData = usePortfolio();
   const { socialLinks } = portfolioData.personalInfo;
 
+  const boxRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDrawing = useRef(false);
   const strokesRef = useRef<Stroke[]>([]);
@@ -29,13 +30,15 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
 
   const [color, setColor] = useState('#000000'); // Default Black on White Canvas
   const [lineWidth, setLineWidth] = useState(4);
+  const [drawMode, setDrawMode] = useState(false);
 
-  // Resize canvas to fill footer area
+  // Resize canvas to fill the bounded doodle box (not the whole footer)
   useEffect(() => {
     const handleResize = () => {
-      if (canvasRef.current) {
-        const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
+      const canvas = canvasRef.current;
+      const box = boxRef.current;
+      if (canvas && box) {
+        const rect = box.getBoundingClientRect();
         canvas.width = rect.width * window.devicePixelRatio;
         canvas.height = rect.height * window.devicePixelRatio;
       }
@@ -46,7 +49,7 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Animation Loop: Render strokes and smoothly fade them out over time
+  // Animation Loop: Render strokes
   useEffect(() => {
     let animId: number;
 
@@ -152,94 +155,138 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
   };
 
   return (
-    <footer id="doodle-canvas" className="bg-white text-black min-h-screen flex flex-col justify-between relative overflow-hidden border-t-2 border-black">
-      
-      {/* Pure White Interactive Disappearing Doodle Canvas Layer with Pencil Cursor ✏️ */}
-      <canvas
-        ref={canvasRef}
-        style={pencilCursorStyle}
-        onMouseDown={handleStart}
-        onMouseMove={handleMove}
-        onMouseUp={handleEnd}
-        onMouseLeave={handleEnd}
-        onTouchStart={handleStart}
-        onTouchMove={handleMove}
-        onTouchEnd={handleEnd}
-        className="absolute inset-0 w-full h-full z-20 touch-none"
-      />
+    <footer id="doodle-canvas" className="bg-white text-black py-16 md:py-20 relative overflow-hidden border-t-2 border-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
 
-      {/* Floating Canvas Palette Controls */}
-      <div className="absolute top-6 right-6 z-30 flex items-center gap-3 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-        <div className="flex items-center gap-1.5 border-r border-black/20 pr-3">
-          {[
-            { hex: '#000000', label: 'Black' },
-            { hex: '#ef4444', label: 'Red' },
-            { hex: '#3b82f6', label: 'Blue' },
-            { hex: '#a855f7', label: 'Purple' },
-            { hex: '#ec4899', label: 'Pink' },
-            { hex: '#10b981', label: 'Green' }
-          ].map((c) => (
-            <button
-              key={c.hex}
-              onClick={() => setColor(c.hex)}
-              style={{ backgroundColor: c.hex }}
-              className={`w-5 h-5 rounded-full border border-black transition-transform cursor-pointer ${
-                color === c.hex ? 'scale-125 ring-2 ring-black' : 'opacity-80 hover:opacity-100'
-              }`}
-              title={c.label}
+        {/* Contained Doodle Box: drawing only happens inside this box, and only while pencil mode is on */}
+        <div className="mb-16">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+            <h3 className="font-display text-xl sm:text-2xl font-black text-black">
+              leave a little doodle ✏️
+            </h3>
+
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Color & Brush Controls only shown while actively drawing */}
+              {drawMode && (
+                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="flex items-center gap-1.5 border-r border-black/20 pr-3">
+                    {[
+                      { hex: '#000000', label: 'Black' },
+                      { hex: '#ef4444', label: 'Red' },
+                      { hex: '#3b82f6', label: 'Blue' },
+                      { hex: '#a855f7', label: 'Purple' },
+                      { hex: '#ec4899', label: 'Pink' },
+                      { hex: '#10b981', label: 'Green' }
+                    ].map((c) => (
+                      <button
+                        key={c.hex}
+                        onClick={() => setColor(c.hex)}
+                        style={{ backgroundColor: c.hex }}
+                        className={`w-5 h-5 rounded-full border border-black transition-transform cursor-pointer ${
+                          color === c.hex ? 'scale-125 ring-2 ring-black' : 'opacity-80 hover:opacity-100'
+                        }`}
+                        title={c.label}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 border-r border-black/20 pr-3 text-xs font-mono">
+                    {[
+                      { size: 3, label: 'Thin' },
+                      { size: 6, label: 'Medium' },
+                      { size: 12, label: 'Bold' }
+                    ].map((b) => (
+                      <button
+                        key={b.size}
+                        onClick={() => setLineWidth(b.size)}
+                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer border border-black ${
+                          lineWidth === b.size ? 'bg-black text-white' : 'bg-white text-black hover:bg-neutral-100'
+                        }`}
+                      >
+                        {b.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={handleClear}
+                    className="flex items-center gap-1 text-xs text-neutral-700 hover:text-black transition-colors cursor-pointer font-bold"
+                    title="Clear Canvas"
+                  >
+                    <Eraser className="w-3.5 h-3.5" />
+                    <span className="text-[10px] uppercase font-mono font-bold">Clear</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Pencil Toggle: drawing is only active while this is on */}
+              <button
+                onClick={() => setDrawMode((d) => !d)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 border-black text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] ${
+                  drawMode ? 'bg-black text-white' : 'bg-white text-black hover:bg-neutral-100'
+                }`}
+                aria-pressed={drawMode}
+                title={drawMode ? 'Stop drawing' : 'Start drawing'}
+              >
+                <Pencil className="w-3.5 h-3.5" />
+                <span>{drawMode ? 'drawing off' : 'start drawing'}</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={boxRef}
+            className="relative w-full h-[70vh] sm:h-[75vh] rounded-3xl border-2 border-black bg-neutral-50 overflow-hidden"
+          >
+            <canvas
+              ref={canvasRef}
+              style={drawMode ? pencilCursorStyle : undefined}
+              onMouseDown={drawMode ? handleStart : undefined}
+              onMouseMove={drawMode ? handleMove : undefined}
+              onMouseUp={drawMode ? handleEnd : undefined}
+              onMouseLeave={drawMode ? handleEnd : undefined}
+              onTouchStart={drawMode ? handleStart : undefined}
+              onTouchMove={drawMode ? handleMove : undefined}
+              onTouchEnd={drawMode ? handleEnd : undefined}
+              className={`absolute inset-0 w-full h-full touch-none ${drawMode ? '' : 'pointer-events-none'}`}
             />
-          ))}
+
+            {!drawMode && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span className="text-neutral-400 text-xs sm:text-sm font-mono uppercase tracking-wider">
+                  click "start drawing" to doodle here
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Brush Width Selector */}
-        <div className="flex items-center gap-1.5 border-r border-black/20 pr-3 text-xs font-mono">
-          {[
-            { size: 3, label: 'Thin' },
-            { size: 6, label: 'Medium' },
-            { size: 12, label: 'Bold' }
-          ].map((b) => (
-            <button
-              key={b.size}
-              onClick={() => setLineWidth(b.size)}
-              className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase transition-colors cursor-pointer border border-black ${
-                lineWidth === b.size ? 'bg-black text-white' : 'bg-white text-black hover:bg-neutral-100'
-              }`}
-            >
-              {b.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Clear Button */}
-        <button
-          onClick={handleClear}
-          className="flex items-center gap-1 text-xs text-neutral-700 hover:text-black transition-colors cursor-pointer font-bold"
-          title="Clear Canvas"
-        >
-          <Eraser className="w-3.5 h-3.5" />
-          <span className="text-[10px] uppercase font-mono font-bold">Clear</span>
-        </button>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 pt-20 pb-8 flex-1 flex flex-col justify-end pointer-events-none">
-        
-        {/* Navigation & Copyright Footer */}
-        <div className="pt-8 border-t-2 border-black pointer-events-auto">
+        {/* Navigation & Copyright Footer (no longer fights with the canvas for clicks) */}
+        <div className="pt-8 border-t-2 border-black">
           <div className="pb-8 flex flex-wrap justify-center gap-x-8 gap-y-4 text-xs sm:text-sm font-semibold text-neutral-700">
-            <a href={socialLinks.vimeo} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Vimeo</a>
-            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Instagram</a>
-            <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">LinkedIn</a>
+            {/* Only shows a link when it's actually set in Sanity — no fallback links */}
+            {(socialLinks as any).vimeo && (
+              <a href={(socialLinks as any).vimeo} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Vimeo</a>
+            )}
+            {(socialLinks as any).instagram && (
+              <a href={(socialLinks as any).instagram} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Instagram</a>
+            )}
+            {(socialLinks as any).linkedin && (
+              <a href={(socialLinks as any).linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">LinkedIn</a>
+            )}
+            {(socialLinks as any).youtube && (
+              <a href={(socialLinks as any).youtube} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">YouTube</a>
+            )}
             <a href="#services" className="hover:text-black transition-colors">Services</a>
             <a href="#cases" className="hover:text-black transition-colors">Highlights</a>
             <a href="#skills" className="hover:text-black transition-colors">Skills</a>
             <a href="#about" className="hover:text-black transition-colors">About Me</a>
           </div>
 
-          <div className="pt-6 border-t border-black/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-600">
+          <div className="pt-6 border-t border-black/15 flex items-center justify-center text-xs font-mono text-neutral-600">
             <span className="font-display font-extrabold text-lg text-black tracking-wider">
               bhumika pagaria
             </span>
-            <span>all rights reserved (©2026)</span>
           </div>
         </div>
 

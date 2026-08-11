@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { type Project } from '../data/portfolioData';
 import { usePortfolio } from '../context/PortfolioContext';
-import { ChevronLeft, ChevronRight, ExternalLink, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DoodleStar, DoodleSparkle } from './DoodleAccents';
+import { FullscreenButton } from './FullscreenButton';
 
-export const CasesSection: React.FC = () => {
+interface CasesSectionProps {
+  onSelectProject: (project: Project) => void;
+}
+
+export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) => {
   const portfolioData = usePortfolio();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeProjectIndex, setActiveProjectIndex] = useState<number>(0);
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [isPaused, setIsPaused] = useState<boolean>(false);
+  const posterImgRef = useRef<HTMLImageElement>(null);
 
   const categories = [
     { id: 'all', label: 'All' },
@@ -28,14 +33,14 @@ export const CasesSection: React.FC = () => {
 
   // Automatic Carousel Loop: Automatically changes to next highlight every 4.5s
   useEffect(() => {
-    if (isPaused || activeProject) return;
+    if (isPaused) return;
 
     const timer = setInterval(() => {
       setActiveProjectIndex((prev) => (prev + 1) % filteredProjects.length);
     }, 4500);
 
     return () => clearInterval(timer);
-  }, [filteredProjects.length, isPaused, activeProject]);
+  }, [filteredProjects.length, isPaused]);
 
   const handleNext = () => {
     setActiveProjectIndex((prev) => (prev + 1) % filteredProjects.length);
@@ -139,7 +144,7 @@ export const CasesSection: React.FC = () => {
                 {/* Action Button: View Details */}
                 <div className="flex flex-wrap items-center gap-4">
                   <button
-                    onClick={() => setActiveProject(currentProject)}
+                    onClick={() => onSelectProject(currentProject)}
                     className="bg-white text-black font-extrabold text-sm px-8 py-3.5 rounded-full hover:bg-neutral-200 hover:scale-105 transition-all cursor-pointer flex items-center"
                   >
                     <span>View Details</span>
@@ -191,32 +196,47 @@ export const CasesSection: React.FC = () => {
                   <DoodleStar className="w-5 h-5 text-white animate-pulse delay-250" />
                 </div>
 
-                <div className="absolute top-8 right-8 z-30 pointer-events-none rotate-45 opacity-60">
+                <div className="absolute -top-8 -right-6 z-30 pointer-events-none rotate-45 opacity-60">
                   <DoodleSparkle className="w-3 h-3 text-white animate-pulse delay-150" />
                 </div>
                 <div className="absolute -top-6 right-1/3 z-30 pointer-events-none -rotate-15 opacity-70">
                   <DoodleStar className="w-4 h-4 text-white animate-pulse delay-300" />
                 </div>
-                <div className="absolute bottom-6 left-6 z-30 pointer-events-none rotate-60 opacity-60">
+                <div className="absolute -bottom-6 -left-6 z-30 pointer-events-none rotate-60 opacity-60">
                   <DoodleSparkle className="w-4 h-4 text-white animate-pulse delay-200" />
                 </div>
                 <div className="absolute -bottom-8 left-1/3 z-30 pointer-events-none -rotate-20 opacity-75">
                   <DoodleStar className="w-6 h-6 text-white animate-pulse delay-100" />
                 </div>
 
-                <div 
-                  className="relative aspect-[3/4] w-full max-w-xs sm:max-w-sm rounded-3xl overflow-hidden border-2 border-neutral-800 bg-neutral-900 cursor-pointer group transition-all duration-700 ease-out transform-gpu [transform-style:preserve-3d] [transform:rotateY(-12deg)_rotateX(6deg)_rotate(-2deg)] hover:[transform:rotateY(0deg)_rotateX(0deg)_rotate(0deg)_scale(1.06)] shadow-2xl hover:border-neutral-500"
-                  onClick={() => setActiveProject(currentProject)}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View details for ${currentProject.title}`}
+                  className="relative aspect-[3/4] w-full max-w-xs sm:max-w-sm rounded-3xl overflow-hidden border-2 border-neutral-800 bg-neutral-900 cursor-pointer group transition-all duration-700 ease-out transform-gpu [transform-style:preserve-3d] [transform:rotateY(-12deg)_rotateX(6deg)_rotate(-2deg)] hover:[transform:rotateY(0deg)_rotateX(0deg)_rotate(0deg)_scale(1.06)] shadow-2xl hover:border-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  onClick={() => onSelectProject(currentProject)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onSelectProject(currentProject);
+                    }
+                  }}
                 >
                   {/* Poster Image */}
-                  <img 
-                    src={currentProject.imageUrl} 
+                  <img
+                    ref={posterImgRef}
+                    src={currentProject.imageUrl}
                     alt={currentProject.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
 
                   {/* Dark Vignette Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+
+                  <FullscreenButton
+                    getTarget={() => posterImgRef.current}
+                    className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity"
+                  />
 
                   {/* Poster Overlay Title */}
                   <div className="absolute bottom-6 left-6 right-6">
@@ -238,87 +258,6 @@ export const CasesSection: React.FC = () => {
         </div>
 
       </div>
-
-      {/* Detail Lightbox Modal */}
-      {activeProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-neutral-900 border-2 border-neutral-700 text-white rounded-[2rem] w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-10 relative shadow-2xl">
-            
-            <button
-              onClick={() => setActiveProject(null)}
-              className="absolute top-6 right-6 p-2 rounded-full border border-neutral-600 hover:bg-white hover:text-black transition-colors cursor-pointer"
-            >
-              <X className="w-6 h-6" />
-            </button>
-
-            <span className="tag-pill-dark mb-4 inline-block">
-              {activeProject.category}
-            </span>
-
-            <h2 className="font-display text-3xl sm:text-4xl font-black text-white tracking-tight mb-2">
-              {activeProject.title}
-            </h2>
-            <p className="text-neutral-400 font-medium text-base mb-6">
-              {activeProject.subtitle}
-            </p>
-
-            {/* Image / Video preview box */}
-            <div className="rounded-2xl border border-neutral-700 overflow-hidden bg-black mb-8 aspect-video relative flex items-center justify-center">
-              <img 
-                src={activeProject.imageUrl} 
-                alt={activeProject.title} 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-6">
-                <p className="text-sm text-neutral-300 font-mono">
-                  Software & Rigs: {activeProject.tools.join(', ')}
-                </p>
-              </div>
-            </div>
-
-            {/* Description & Process Breakdown */}
-            <div className="space-y-6 text-neutral-300 text-sm sm:text-base leading-relaxed">
-              <div>
-                <h4 className="font-bold text-white uppercase text-xs tracking-wider mb-2">Overview</h4>
-                <p>{activeProject.description}</p>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-white uppercase text-xs tracking-wider mb-2">Key Workflow Breakdown</h4>
-                <ul className="list-disc list-inside space-y-2 text-neutral-300">
-                  {activeProject.breakdown.map((item, idx) => (
-                    <li key={idx}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Modal Actions */}
-            <div className="mt-8 pt-6 border-t border-neutral-800 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap gap-2">
-                {activeProject.tools.map((tool) => (
-                  <span key={tool} className="px-3 py-1 rounded-full text-xs font-semibold bg-neutral-800 text-neutral-300 border border-neutral-700">
-                    {tool}
-                  </span>
-                ))}
-              </div>
-
-              {activeProject.link && (
-                <a
-                  href={activeProject.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-pill btn-pill-inverted text-xs px-6 py-2.5"
-                >
-                  <span>view full project</span>
-                  <ExternalLink className="w-4 h-4 ml-1.5" />
-                </a>
-              )}
-            </div>
-
-          </div>
-        </div>
-      )}
     </section>
   );
 };

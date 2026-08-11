@@ -56,6 +56,28 @@ export const DoodleDownArrow: React.FC<{ className?: string }> = ({ className = 
   );
 };
 
+// Hand-Doodled Cascading Scroll-Down Chevrons (3 pencil-sketched V marks, pulsing downward in sequence)
+export const DoodleScrollChevrons: React.FC<{ className?: string }> = ({ className = "w-8 h-14" }) => {
+  const chevronTops = [4, 22, 40];
+  return (
+    <svg className={className} viewBox="0 0 30 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {chevronTops.map((y, i) => (
+        <motion.path
+          key={y}
+          d={`M6 ${y} C 10 ${y + 6}, 13 ${y + 9}, 15 ${y + 11} C 17 ${y + 9}, 20 ${y + 6}, 24 ${y}`}
+          stroke="#000000"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          initial={{ opacity: 0.15 }}
+          animate={{ opacity: [0.15, 1, 0.15] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.25 }}
+        />
+      ))}
+    </svg>
+  );
+};
+
 // Hand-Doodled Sketched Arrow pointing down/right
 export const DoodleArrow: React.FC<{ className?: string }> = ({ className = "w-12 h-12" }) => {
   return (

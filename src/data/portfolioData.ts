@@ -1,7 +1,7 @@
 export interface Project {
   id: string;
   title: string;
-  category: '3d-animation' | '3d-modelling' | 'illustrations' | 'client-design';
+  category: '3d-animation' | '3d-modelling' | 'illustrations' | 'client-design' | 'logo-design' | 'others';
   subtitle: string;
   description: string;
   tools: string[];
@@ -17,12 +17,9 @@ export interface Service {
   description: string;
   tags: string[];
   bgImage?: string;
-}
-
-export interface FaqItem {
-  id: string;
-  question: string;
-  answer: string;
+  // Matches a Project's `category` so its detail page shows the right work.
+  // Kept separate from `id` because Sanity assigns its own random id per document.
+  categoryTag?: string;
 }
 
 export const PORTFOLIO_DATA = {
@@ -60,39 +57,45 @@ export const PORTFOLIO_DATA = {
       title: "3D Animation",
       description: "Bringing characters to life with realistic weight, physics, body mechanics, dynamic dialogue lip-sync, and rich emotional expression.",
       tags: ["Autodesk Maya", "SyncSketch", "Character Rigs"],
-      bgImage: "/animation-bg.jpeg"
+      bgImage: "/animation-bg.jpeg",
+      categoryTag: "3d-animation"
     },
     {
       id: "3d-modelling",
       title: "3D Modelling",
       description: "Crafting clean geometry, 3D prop models, environment assets, and optimized UV maps ready for production pipelines.",
       tags: ["Maya", "Blender", "ZBrush"],
-      bgImage: "/3d-modelling-2-bg.jpeg"
+      bgImage: "/3d-modelling-2-bg.jpeg",
+      categoryTag: "3d-modelling"
     },
     {
       id: "illustrations",
       title: "Illustrations",
       description: "Custom digital illustrations in both monochrome line art and vibrant color palettes, character designs, and cover art.",
       tags: ["Procreate", "Photoshop", "Digital Painting"],
-      bgImage: "/illustration-bg.jpeg"
+      bgImage: "/illustration-bg.jpeg",
+      categoryTag: "illustrations"
     },
     {
       id: "client-work",
       title: "Client work",
       description: "Commercial graphic banners, event posters, promotional materials, and client branding assets.",
-      tags: ["Branding", "Graphics", "Design"]
+      tags: ["Branding", "Graphics", "Design"],
+      categoryTag: "client-design"
     },
     {
       id: "logo-design",
       title: "Logo Design",
       description: "Crafting unique brand identity marks, vector logos, typography systems, and editorial brand kits.",
-      tags: ["Logo Marks", "Identity", "Vector Art"]
+      tags: ["Logo Marks", "Identity", "Vector Art"],
+      categoryTag: "logo-design"
     },
     {
       id: "others",
       title: "Others",
       description: "Production coordination, pipeline planning, storyboarding, animatics, and custom creative direction.",
-      tags: ["Pipeline", "Coordination", "Creative Direction"]
+      tags: ["Pipeline", "Coordination", "Creative Direction"],
+      categoryTag: "others"
     }
   ] as Service[],
 
@@ -212,33 +215,5 @@ export const PORTFOLIO_DATA = {
     { name: "problem solving" },
     { name: "time management" },
     { name: "feedback integration" }
-  ],
-
-  faqs: [
-    {
-      id: "faq-1",
-      question: "what is needed to start working with you?",
-      answer: "A brief project overview, your target deadline, reference materials or storyboards (if available), and any specific file format requirements. Once we align on scope, we can get started right away!"
-    },
-    {
-      id: "faq-2",
-      question: "is it possible to work with you without visual content?",
-      answer: "Yes! If you only have an idea or script, I can assist with concept sketches, character visual development, and storyboards to bring your vision into solid visual form."
-    },
-    {
-      id: "faq-3",
-      question: "which software and pipeline do you use?",
-      answer: "For 3D animation and modeling, I primary rely on Autodesk Maya, Blender, and ZBrush. For 2D animation and visual design, I use Procreate, After Effects, and Photoshop."
-    },
-    {
-      id: "faq-4",
-      question: "how do you determine the price for a project?",
-      answer: "Pricing is calculated based on project complexity, length of animation (seconds/minutes), level of detail (blockout vs fully rendered), and timeline urgency. I offer both fixed project quotes and milestone-based rates."
-    },
-    {
-      id: "faq-5",
-      question: "do you work on a project basis with studios & agencies?",
-      answer: "Absolutely! I am available for freelance project contracts, long-term agency collaborations, and studio production roles (remote or hybrid)."
-    }
-  ] as FaqItem[]
+  ]
 };

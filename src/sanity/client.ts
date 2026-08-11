@@ -62,6 +62,7 @@ export async function fetchSanityPortfolioData() {
       title,
       description,
       tags,
+      categoryTag,
       "bgImage": bgImage.asset->url
     }`;
 
@@ -84,6 +85,7 @@ export async function fetchSanityPortfolioData() {
       vimeoUrl,
       instagramUrl,
       linkedinUrl,
+      youtubeUrl,
       email
     }`;
 
@@ -135,19 +137,23 @@ export async function fetchSanityPortfolioData() {
         tags: (PORTFOLIO_DATA.personalInfo as any).tags || [],
         profileImage: personal?.profileImage || (PORTFOLIO_DATA.personalInfo as any).profileImage,
         resumeUrl: personal?.resumeFileUrl || personal?.resumeUrl || (PORTFOLIO_DATA.personalInfo as any).resumeUrl || '/bhumika_pagaria_cv.pdf',
-        socialLinks: {
-          vimeo: personal?.vimeoUrl || PORTFOLIO_DATA.personalInfo.socialLinks.vimeo,
-          instagram: personal?.instagramUrl || PORTFOLIO_DATA.personalInfo.socialLinks.instagram,
-          linkedin: personal?.linkedinUrl || PORTFOLIO_DATA.personalInfo.socialLinks.linkedin,
-          email: personal?.email || PORTFOLIO_DATA.personalInfo.socialLinks.email,
-        }
+        // Once a real personalInfo document exists in Sanity, each link is shown exactly as
+        // entered there (or hidden if left blank) — no silent fallback to the mock links.
+        // The mock links are only used before any personalInfo document exists at all,
+        // so the site still looks complete while developing.
+        socialLinks: personal ? {
+          vimeo: personal.vimeoUrl || undefined,
+          instagram: personal.instagramUrl || undefined,
+          linkedin: personal.linkedinUrl || undefined,
+          youtube: personal.youtubeUrl || undefined,
+          email: personal.email || PORTFOLIO_DATA.personalInfo.socialLinks.email,
+        } : PORTFOLIO_DATA.personalInfo.socialLinks
       },
       services: sanitizedServices,
       projects: sanitizedProjects,
       skills: Array.isArray(skills) && skills.length > 0 ? skills.filter((s: any) => s.type !== 'soft') : PORTFOLIO_DATA.skills,
       softSkills: Array.isArray(skills) && skills.length > 0 ? skills.filter((s: any) => s.type === 'soft') : (PORTFOLIO_DATA as any).softSkills,
       testimonials: Array.isArray(testimonials) && testimonials.length > 0 ? testimonials : (PORTFOLIO_DATA as any).testimonials,
-      faqs: PORTFOLIO_DATA.faqs || [],
     };
   } catch (error) {
     console.warn('Sanity CMS connection warning, using fallback portfolio data:', error);

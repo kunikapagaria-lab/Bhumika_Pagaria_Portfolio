@@ -87,10 +87,19 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           {portfolioData.services.map((service) => (
             <div
               key={service.id}
-              className={`card-editorial flex flex-col justify-between group cursor-pointer relative overflow-hidden p-10 sm:p-12 min-h-[270px] sm:min-h-[285px] transition-all duration-300 ${
+              role="button"
+              tabIndex={0}
+              aria-label={`Open ${service.title} service`}
+              className={`card-editorial flex flex-col justify-between group cursor-pointer relative overflow-hidden p-10 sm:p-12 min-h-[270px] sm:min-h-[285px] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
                 service.bgImage ? 'bg-black text-white border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]' : 'bg-white'
               }`}
               onClick={() => handleCardClick(service)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleCardClick(service);
+                }
+              }}
             >
               {/* Full-Cover Seamless Background Image & Ambient Vignette (No Dark Blocks or Cut Lines) */}
               {service.bgImage && (

@@ -39,7 +39,23 @@ export const serviceSchema = {
     { name: 'description', title: 'Short Overview Description', type: 'text' },
     { name: 'tags', title: 'Service Tags', type: 'array', of: [{ type: 'string' }] },
     { name: 'bgImage', title: 'Card Background Image', type: 'image', options: { hotspot: true } },
-    { name: 'order', title: 'Display Order', type: 'number' }
+    { name: 'order', title: 'Display Order', type: 'number' },
+    {
+      name: 'categoryTag',
+      title: 'Matching Project Category',
+      description: 'Pick the same category you use when tagging Projects, so this service page automatically shows the right project examples.',
+      type: 'string',
+      options: {
+        list: [
+          { title: '3D Animation', value: '3d-animation' },
+          { title: '3D Modelling', value: '3d-modelling' },
+          { title: 'Illustrations', value: 'illustrations' },
+          { title: 'Client Design', value: 'client-design' },
+          { title: 'Logo Design', value: 'logo-design' },
+          { title: 'Others', value: 'others' },
+        ]
+      }
+    }
   ]
 };
 
@@ -74,9 +90,10 @@ export const personalInfoSchema = {
     { name: 'profileImage', title: 'Profile / Bio Photo', type: 'image', options: { hotspot: true } },
     { name: 'resumeFile', title: 'Resume / CV PDF Document (Upload PDF)', type: 'file', options: { accept: '.pdf' } },
     { name: 'resumeUrl', title: 'Resume / CV PDF External Link (Optional)', type: 'url' },
-    { name: 'vimeoUrl', title: 'Vimeo Channel URL', type: 'url' },
-    { name: 'instagramUrl', title: 'Instagram Profile URL', type: 'url' },
-    { name: 'linkedinUrl', title: 'LinkedIn Profile URL', type: 'url' },
+    { name: 'vimeoUrl', title: 'Vimeo Channel URL', type: 'url', description: 'Leave empty to hide the Vimeo link on the site.' },
+    { name: 'instagramUrl', title: 'Instagram Profile URL', type: 'url', description: 'Leave empty to hide the Instagram link on the site.' },
+    { name: 'linkedinUrl', title: 'LinkedIn Profile URL', type: 'url', description: 'Leave empty to hide the LinkedIn link on the site.' },
+    { name: 'youtubeUrl', title: 'YouTube Channel URL', type: 'url', description: 'Leave empty to hide the YouTube link on the site.' },
     { name: 'email', title: 'Contact Email', type: 'string' }
   ]
 };
