@@ -4,6 +4,7 @@ import { usePortfolio } from '../context/usePortfolio';
 import { ExternalLink, Play } from 'lucide-react';
 import { DoodleStar } from './DoodleAccents';
 import { FullscreenButton } from './FullscreenButton';
+import { getVimeoEmbedUrl } from '../utils/vimeo';
 
 interface ServiceDetailPageProps {
   service: Service;
@@ -27,9 +28,9 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
   // Match projects using the service's categoryTag (Sanity gives every document its own
   // random id, so id can't be relied on to match a project's category — see Service type).
   const matchKey = service.categoryTag || service.id;
-  const displayProjects = portfolioData.projects.filter(
-    (p) => p.category === matchKey
-  );
+  const displayProjects = portfolioData.projects
+    .filter((p) => p.category === matchKey)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
   return (
     <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 flex flex-col justify-between pt-24 pb-16">
@@ -151,7 +152,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
                         <>
                           <iframe
                             ref={(el) => { mediaRefs.current[project.id] = el; }}
-                            src={project.videoUrl.includes('?') ? `${project.videoUrl}&autoplay=1` : `${project.videoUrl}?autoplay=1`}
+                            src={`${getVimeoEmbedUrl(project.videoUrl)}?autoplay=1`}
                             title={project.title}
                             className="w-full h-full border-0"
                             allow="autoplay; fullscreen; picture-in-picture"

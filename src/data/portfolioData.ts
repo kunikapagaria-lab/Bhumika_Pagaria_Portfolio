@@ -1,7 +1,7 @@
 export interface Project {
   id: string;
   title: string;
-  category: '3d-animation' | '3d-modelling' | 'illustrations' | 'client-design' | 'logo-design' | 'others';
+  category: '3d-animation' | '3d-modelling' | '2d-animation' | 'illustrations' | 'commercial-work' | 'client-design' | 'logo-design' | 'odd-bits' | 'others';
   subtitle: string;
   description: string;
   tools: string[];
@@ -15,6 +15,8 @@ export interface Project {
   // images mixed together, like a document). Untyped since Portable Text's shape is defined
   // by Sanity, not by this app.
   fullReport?: any[];
+  // Controls the order projects appear within their matching service page. Lower shows first.
+  order?: number;
 }
 
 export interface Service {
@@ -35,6 +37,7 @@ export const PORTFOLIO_DATA = {
     role: "Multimedia Designer & Project Coordinator",
     subRole: "Part designer, part coordinator — keeping pixels moving and projects flowing.",
     bio: "Passionate 3D animator and designer holding a Master's degree in 3D Animation from the University of Hertfordshire and a diploma from MAAC. Specializing in character performance, quadruped mechanics, 3D prop modeling, and digital illustrations.",
+    location: "London, UK",
     education: [
       "MA in 3D Animation - University of Hertfordshire",
       "Diploma in Animation & Visual Arts - MAAC"

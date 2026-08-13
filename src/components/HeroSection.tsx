@@ -1,6 +1,6 @@
 import React from 'react';
+import { ArrowDown } from 'lucide-react';
 import { HeroIllustration } from './Illustrations';
-import { DoodleScrollChevron } from './DoodleAccents';
 import { usePortfolio } from '../context/usePortfolio';
 
 interface HeroSectionProps {
@@ -49,9 +49,11 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
 
       </div>
 
-      {/* Bottom Center Self-Drawing Pencil Scroll Chevron */}
+      {/* Bottom Center Scroll Cue — same circular arrow-badge style used on the service cards */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:bottom-10 z-20">
-        <DoodleScrollChevron className="w-12 h-9" />
+        <div className="w-12 h-12 rounded-full border-2 border-black bg-white text-black flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+          <ArrowDown className="w-6 h-6" />
+        </div>
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { Eraser, Pencil } from 'lucide-react';
 
 interface FooterSectionProps {
   onOpenContact?: () => void;
+  onGoHome?: () => void;
 }
 
 interface Point {
@@ -18,7 +19,7 @@ interface Stroke {
   opacity: number;
 }
 
-export const FooterSection: React.FC<FooterSectionProps> = () => {
+export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
   const portfolioData = usePortfolio();
   const { socialLinks } = portfolioData.personalInfo;
 
@@ -281,6 +282,9 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
             {(socialLinks as any).vimeo && (
               <a href={(socialLinks as any).vimeo} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Vimeo</a>
             )}
+            {(socialLinks as any).behance && (
+              <a href={(socialLinks as any).behance} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Behance</a>
+            )}
             {(socialLinks as any).instagram && (
               <a href={(socialLinks as any).instagram} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Instagram</a>
             )}
@@ -297,9 +301,13 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
           </div>
 
           <div className="pt-6 border-t border-black/15 flex items-center justify-center text-xs font-mono text-neutral-600">
-            <span className="font-display font-extrabold text-lg text-black tracking-wider">
+            <button
+              onClick={onGoHome}
+              className="font-display font-extrabold text-lg text-black tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
+              title="Back to homepage"
+            >
               bhumika pagaria
-            </span>
+            </button>
           </div>
         </div>
 

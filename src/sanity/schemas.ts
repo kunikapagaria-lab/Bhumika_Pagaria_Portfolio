@@ -13,9 +13,12 @@ export const projectSchema = {
         list: [
           { title: '3D Animation', value: '3d-animation' },
           { title: '3D Modelling', value: '3d-modelling' },
+          { title: '2D Animation', value: '2d-animation' },
           { title: 'Illustrations', value: 'illustrations' },
+          { title: 'Commercial Work', value: 'commercial-work' },
           { title: 'Client Design', value: 'client-design' },
           { title: 'Logo Design', value: 'logo-design' },
+          { title: 'Odd Bits', value: 'odd-bits' },
           { title: 'Others', value: 'others' },
         ]
       }
@@ -51,7 +54,8 @@ export const projectSchema = {
       ],
     },
     { name: 'isHighlight', title: 'Show in Hero Carousel Highlights?', type: 'boolean' },
-    { name: 'link', title: 'External Link / Case Study URL', type: 'url' }
+    { name: 'link', title: 'External Link / Case Study URL', type: 'url' },
+    { name: 'order', title: 'Display Order (within its service)', description: 'Lower numbers show first. Use this to control the order projects appear under their matching service.', type: 'number' }
   ]
 };
 
@@ -74,9 +78,12 @@ export const serviceSchema = {
         list: [
           { title: '3D Animation', value: '3d-animation' },
           { title: '3D Modelling', value: '3d-modelling' },
+          { title: '2D Animation', value: '2d-animation' },
           { title: 'Illustrations', value: 'illustrations' },
+          { title: 'Commercial Work', value: 'commercial-work' },
           { title: 'Client Design', value: 'client-design' },
           { title: 'Logo Design', value: 'logo-design' },
+          { title: 'Odd Bits', value: 'odd-bits' },
           { title: 'Others', value: 'others' },
         ]
       }
@@ -90,9 +97,9 @@ export const skillSchema = {
   type: 'document',
   fields: [
     { name: 'name', title: 'Skill Name', type: 'string' },
-    { 
-      name: 'type', 
-      title: 'Skill Type', 
+    {
+      name: 'type',
+      title: 'Skill Type',
       type: 'string',
       options: {
         list: [
@@ -100,7 +107,8 @@ export const skillSchema = {
           { title: 'Soft Skill & Competency', value: 'soft' }
         ]
       }
-    }
+    },
+    { name: 'order', title: 'Display Order', description: 'Lower numbers show first.', type: 'number' }
   ]
 };
 
@@ -112,10 +120,13 @@ export const personalInfoSchema = {
     { name: 'name', title: 'Full Name', type: 'string' },
     { name: 'tagline', title: 'Hero Tagline', type: 'string' },
     { name: 'bio', title: 'About Me Bio Paragraph', type: 'text' },
+    { name: 'location', title: 'Location (e.g. London, UK)', type: 'string' },
+    { name: 'education', title: 'Education & Degrees', description: 'Add one line per degree/qualification.', type: 'array', of: [{ type: 'string' }] },
     { name: 'profileImage', title: 'Profile / Bio Photo', type: 'image', options: { hotspot: true } },
     { name: 'resumeFile', title: 'Resume / CV PDF Document (Upload PDF)', type: 'file', options: { accept: '.pdf' } },
     { name: 'resumeUrl', title: 'Resume / CV PDF External Link (Optional)', type: 'url' },
     { name: 'vimeoUrl', title: 'Vimeo Channel URL', type: 'url', description: 'Leave empty to hide the Vimeo link on the site.' },
+    { name: 'behanceUrl', title: 'Behance Profile URL', type: 'url', description: 'Leave empty to hide the Behance link on the site.' },
     { name: 'instagramUrl', title: 'Instagram Profile URL', type: 'url', description: 'Leave empty to hide the Instagram link on the site.' },
     { name: 'linkedinUrl', title: 'LinkedIn Profile URL', type: 'url', description: 'Leave empty to hide the LinkedIn link on the site.' },
     { name: 'youtubeUrl', title: 'YouTube Channel URL', type: 'url', description: 'Leave empty to hide the YouTube link on the site.' },

@@ -1,52 +1,42 @@
 import React from 'react';
-import { Box, Palette, Sparkles, Layers, Cpu, Heart, Activity, Compass, Flame, Code } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { usePortfolio } from '../context/usePortfolio';
 
-// Helper to match skill names to relevant icons
-const getSkillIcon = (name: string, type: string) => {
-  const lower = name.toLowerCase();
-  if (lower.includes('blender')) return Box;
-  if (lower.includes('maya')) return Cpu;
-  if (lower.includes('zbrush')) return Flame;
-  if (lower.includes('after') || lower.includes('effects')) return Layers;
-  if (lower.includes('photo') || lower.includes('procreate') || lower.includes('illustrator')) return Palette;
-  if (lower.includes('substance') || lower.includes('painter')) return Sparkles;
-  if (lower.includes('performance')) return Heart;
-  if (lower.includes('mechanics') || lower.includes('physics')) return Activity;
-  if (lower.includes('direction') || lower.includes('creative')) return Compass;
-  return type === 'soft' ? Heart : Code;
-};
+// One consistent icon is used for every skill card, software and soft skills alike.
+const SkillIcon = Sparkles;
 
 export const SkillsSection: React.FC = () => {
   const portfolioData = usePortfolio();
 
   const defaultSoftwareCards = [
-    { id: 'maya', title: 'AUTODESK MAYA', icon: Cpu },
-    { id: 'blender', title: 'BLENDER 3D', icon: Box },
-    { id: 'zbrush', title: 'ZBRUSH SCULPTING', icon: Flame },
-    { id: 'aftereffects', title: 'AFTER EFFECTS', icon: Layers },
-    { id: 'photoshop', title: 'PHOTOSHOP & PROCREATE', icon: Palette },
-    { id: 'substance', title: 'SUBSTANCE PAINTER', icon: Sparkles }
+    { id: 'maya', title: 'AUTODESK MAYA' },
+    { id: 'blender', title: 'BLENDER 3D' },
+    { id: 'zbrush', title: 'ZBRUSH SCULPTING' },
+    { id: 'aftereffects', title: 'AFTER EFFECTS' },
+    { id: 'photoshop', title: 'PHOTOSHOP & PROCREATE' },
+    { id: 'substance', title: 'SUBSTANCE PAINTER' }
   ];
 
   const defaultSoftSkillsCards = [
-    { id: 'performance', title: 'CHARACTER PERFORMANCE', icon: Heart },
-    { id: 'mechanics', title: 'BODY MECHANICS & PHYSICS', icon: Activity },
-    { id: 'direction', title: 'CREATIVE DIRECTION', icon: Compass }
+    { id: 'performance', title: 'CHARACTER PERFORMANCE' },
+    { id: 'mechanics', title: 'BODY MECHANICS & PHYSICS' },
+    { id: 'direction', title: 'CREATIVE DIRECTION' }
   ];
 
-  // Dynamically map skills from Sanity CMS if available
-  const sanitySoftwareSkills = (portfolioData.skills || []).map((s: any, idx: number) => ({
-    id: s.id || s._id || `sanity-soft-${idx}`,
-    title: (s.name || s.title || s.name || '').toUpperCase(),
-    icon: getSkillIcon(s.name || s.title || '', 'software')
-  }));
+  // Dynamically map skills from Sanity CMS if available, sorted by their display order
+  const sanitySoftwareSkills = [...(portfolioData.skills || [])]
+    .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
+    .map((s: any, idx: number) => ({
+      id: s.id || s._id || `sanity-soft-${idx}`,
+      title: (s.name || s.title || s.name || '').toUpperCase()
+    }));
 
-  const sanitySoftSkills = ((portfolioData as any).softSkills || []).map((s: any, idx: number) => ({
-    id: s.id || s._id || `sanity-softskill-${idx}`,
-    title: (s.name || s.title || s.name || '').toUpperCase(),
-    icon: getSkillIcon(s.name || s.title || '', 'soft')
-  }));
+  const sanitySoftSkills = [...((portfolioData as any).softSkills || [])]
+    .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
+    .map((s: any, idx: number) => ({
+      id: s.id || s._id || `sanity-softskill-${idx}`,
+      title: (s.name || s.title || s.name || '').toUpperCase()
+    }));
 
   const softwareCards = sanitySoftwareSkills.length > 0 ? sanitySoftwareSkills : defaultSoftwareCards;
   const softSkillsCards = sanitySoftSkills.length > 0 ? sanitySoftSkills : defaultSoftSkillsCards;
@@ -88,22 +78,19 @@ export const SkillsSection: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
-            {softwareCards.map((card: any) => {
-              const IconComponent = card.icon || Code;
-              return (
-                <div
-                  key={card.id}
-                  className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
-                >
-                  <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
-                    <IconComponent className="w-4 h-4 stroke-[2.5]" />
-                  </div>
-                  <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
-                    {card.title}
-                  </h4>
+            {softwareCards.map((card: any) => (
+              <div
+                key={card.id}
+                className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
+              >
+                <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
+                  <SkillIcon className="w-4 h-4 stroke-[2.5]" />
                 </div>
-              );
-            })}
+                <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
+                  {card.title}
+                </h4>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -118,22 +105,19 @@ export const SkillsSection: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
-            {softSkillsCards.map((card: any) => {
-              const IconComponent = card.icon || Heart;
-              return (
-                <div
-                  key={card.id}
-                  className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
-                >
-                  <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
-                    <IconComponent className="w-4 h-4 stroke-[2.5]" />
-                  </div>
-                  <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
-                    {card.title}
-                  </h4>
+            {softSkillsCards.map((card: any) => (
+              <div
+                key={card.id}
+                className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
+              >
+                <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
+                  <SkillIcon className="w-4 h-4 stroke-[2.5]" />
                 </div>
-              );
-            })}
+                <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
+                  {card.title}
+                </h4>
+              </div>
+            ))}
           </div>
         </div>
 

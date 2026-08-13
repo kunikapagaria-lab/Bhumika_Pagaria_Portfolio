@@ -32,6 +32,7 @@ interface PortfolioHomeProps {
   onOpenContact: () => void;
   onSelectService: (service: Service) => void;
   onSelectProject: (project: Project) => void;
+  onGoHome: () => void;
 }
 
 // AnimatePresence (mode="wait") only mounts this once the previous page has fully
@@ -41,7 +42,7 @@ interface PortfolioHomeProps {
 // it's already in the right place by the time the fade-in becomes visible — no
 // separate timer racing against the animation, and no visible scroll-jump partway
 // through the fade.
-function PortfolioHome({ onOpenContact, onSelectService, onSelectProject }: PortfolioHomeProps) {
+function PortfolioHome({ onOpenContact, onSelectService, onSelectProject, onGoHome }: PortfolioHomeProps) {
   useLayoutEffect(() => {
     const id = window.location.hash.replace('#', '');
     if (id) {
@@ -62,7 +63,7 @@ function PortfolioHome({ onOpenContact, onSelectService, onSelectProject }: Port
         <TestimonialsSection />
       </main>
 
-      <FooterSection onOpenContact={onOpenContact} />
+      <FooterSection onOpenContact={onOpenContact} onGoHome={onGoHome} />
     </>
   );
 }
@@ -116,6 +117,14 @@ export function App() {
     window.location.hash = `project-${project.id}`;
   };
 
+  // Used by the name wherever it appears (nav bar, footer) to jump straight back to the
+  // homepage — clears any active service/project detail view and scrolls to the top, even if
+  // the hash is already empty (in which case a hash change alone wouldn't fire anything).
+  const handleGoHome = () => {
+    window.location.hash = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const isDetailView = !!activeService || !!activeProject;
 
   return (
@@ -128,6 +137,7 @@ export function App() {
         onOpenContact={() => setContactOpen(true)}
         onBackClick={() => window.history.back()}
         onSelectService={handleSelectService}
+        onGoHome={handleGoHome}
         isDetailView={isDetailView}
       />
 
@@ -169,6 +179,7 @@ export function App() {
               onOpenContact={() => setContactOpen(true)}
               onSelectService={handleSelectService}
               onSelectProject={handleSelectProject}
+              onGoHome={handleGoHome}
             />
           </motion.div>
         )}

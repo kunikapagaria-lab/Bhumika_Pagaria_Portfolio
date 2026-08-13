@@ -12,6 +12,7 @@ interface NavbarProps {
   onOpenContact: () => void;
   onBackClick?: () => void;
   onSelectService?: (service: Service) => void;
+  onGoHome?: () => void;
   isDetailView?: boolean;
 }
 
@@ -23,7 +24,7 @@ const navLinks = [
   { label: 'about me', href: '#about' },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSelectService, isDetailView }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSelectService, onGoHome, isDetailView }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
@@ -112,9 +113,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSe
                   <DoodleDownArrow className="w-7 h-10 sm:w-8 sm:h-12 rotate-90 transition-transform group-hover:-translate-x-1" />
                 </button>
               )}
-              <span className="font-display font-extrabold text-base sm:text-xl md:text-2xl tracking-tight text-black whitespace-nowrap">
+              <button
+                onClick={onGoHome}
+                className="font-display font-extrabold text-base sm:text-xl md:text-2xl tracking-tight text-black whitespace-nowrap cursor-pointer hover:opacity-70 transition-opacity"
+                title="Back to homepage"
+              >
                 Bhumika Pagaria
-              </span>
+              </button>
             </motion.div>
           )}
         </AnimatePresence>

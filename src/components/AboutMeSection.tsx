@@ -39,7 +39,7 @@ export const AboutMeSection: React.FC = () => {
               />
             </div>
             <span className="mt-3 text-xs font-mono font-semibold text-neutral-500">
-              [ London, UK ]
+              [ {(portfolioData.personalInfo as any).location || 'London, UK'} ]
             </span>
           </div>
 

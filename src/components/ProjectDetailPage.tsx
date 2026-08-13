@@ -3,6 +3,8 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { type Project } from '../data/portfolioData';
 import { ExternalLink, CheckCircle2 } from 'lucide-react';
 import { FullscreenButton } from './FullscreenButton';
+import { MediaCarousel } from './MediaCarousel';
+import { getVimeoEmbedUrl } from '../utils/vimeo';
 
 interface ProjectDetailPageProps {
   project: Project;
@@ -48,8 +50,11 @@ const reportComponents: PortableTextComponents = {
 };
 
 export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project }) => {
-  const imgRef = useRef<HTMLImageElement>(null);
-  const galleryRefs = useRef<Record<number, HTMLImageElement | null>>({});
+  const mediaSlides = [
+    { type: 'image' as const, url: project.imageUrl, alt: project.title },
+    ...(project.gallery || []).map((g) => ({ type: 'image' as const, url: g.url, alt: g.alt || project.title })),
+    ...(project.videoUrl ? [{ type: 'video' as const, url: getVimeoEmbedUrl(project.videoUrl)! }] : []),
+  ];
 
   return (
     <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 pt-24 pb-16">
@@ -66,16 +71,8 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
           {project.subtitle}
         </p>
 
-        {/* Media Image Preview */}
-        <div className="rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black aspect-video relative mb-10">
-          <img
-            ref={imgRef}
-            src={project.imageUrl}
-            alt={project.title}
-            className="w-full h-full object-cover"
-          />
-          <FullscreenButton getTarget={() => imgRef.current} className="absolute top-4 right-4 z-10" />
-        </div>
+        {/* Media Carousel: main image, gallery photos, and video (if any) in one swipeable set */}
+        <MediaCarousel title={project.title} slides={mediaSlides} />
 
         <div className="space-y-8 text-neutral-800 text-base leading-relaxed">
           <div>
@@ -107,31 +104,6 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
                   <div key={idx} className="flex items-start gap-2.5 text-sm sm:text-base text-neutral-700 bg-white p-3 rounded-xl border border-neutral-200">
                     <CheckCircle2 className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
                     <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Photo Gallery — as many extra photos as have been added in Sanity */}
-          {project.gallery && project.gallery.length > 0 && (
-            <div>
-              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
-                Gallery
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {project.gallery.map((photo, idx) => (
-                  <div key={idx} className="relative aspect-square rounded-xl border-2 border-black overflow-hidden bg-neutral-100 group">
-                    <img
-                      ref={(el) => { galleryRefs.current[idx] = el; }}
-                      src={photo.url}
-                      alt={photo.alt || `${project.title} photo ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    <FullscreenButton
-                      getTarget={() => galleryRefs.current[idx]}
-                      className="absolute top-2 right-2 z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                    />
                   </div>
                 ))}
               </div>

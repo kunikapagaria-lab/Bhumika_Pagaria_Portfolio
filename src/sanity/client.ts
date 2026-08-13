@@ -62,7 +62,8 @@ export async function fetchSanityPortfolioData() {
         }
       },
       isHighlight,
-      link
+      link,
+      order
     }`;
 
     const servicesQuery = `*[_type == "service"] | order(order asc){
@@ -78,7 +79,8 @@ export async function fetchSanityPortfolioData() {
       "id": _id,
       name,
       title,
-      type
+      type,
+      order
     }`;
 
     const personalQuery = `*[_type in ["personalInfo", "personal", "about"]][0]{
@@ -86,11 +88,13 @@ export async function fetchSanityPortfolioData() {
       nickname,
       tagline,
       bio,
+      location,
       education,
       "profileImage": profileImage.asset->url,
       "resumeFileUrl": resumeFile.asset->url,
       resumeUrl,
       vimeoUrl,
+      behanceUrl,
       instagramUrl,
       linkedinUrl,
       youtubeUrl,
@@ -139,7 +143,7 @@ export async function fetchSanityPortfolioData() {
         role: PORTFOLIO_DATA.personalInfo.role,
         tagline: personal?.tagline || (PORTFOLIO_DATA.personalInfo as any).tagline || '',
         bio: bioText || PORTFOLIO_DATA.personalInfo.bio,
-        location: (PORTFOLIO_DATA.personalInfo as any).location || 'London, UK',
+        location: personal?.location || (PORTFOLIO_DATA.personalInfo as any).location || 'London, UK',
         education: Array.isArray(personal?.education) && personal.education.length > 0 
           ? personal.education.map((e: any) => extractText(e) || e) 
           : PORTFOLIO_DATA.personalInfo.education,
@@ -152,6 +156,7 @@ export async function fetchSanityPortfolioData() {
         // so the site still looks complete while developing.
         socialLinks: personal ? {
           vimeo: personal.vimeoUrl || undefined,
+          behance: personal.behanceUrl || undefined,
           instagram: personal.instagramUrl || undefined,
           linkedin: personal.linkedinUrl || undefined,
           youtube: personal.youtubeUrl || undefined,

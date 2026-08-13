@@ -21,8 +21,13 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
     { id: 'all', label: 'All' },
     { id: '3d-animation', label: '3D Animation' },
     { id: '3d-modelling', label: '3D Modelling' },
+    { id: '2d-animation', label: '2D Animation' },
     { id: 'illustrations', label: 'Illustrations' },
+    { id: 'commercial-work', label: 'Commercial Work' },
     { id: 'client-design', label: 'Client Design' },
+    { id: 'logo-design', label: 'Logo Design' },
+    { id: 'odd-bits', label: 'Odd Bits' },
+    { id: 'others', label: 'Others' },
   ];
 
   const filteredProjects = selectedCategory === 'all' 
