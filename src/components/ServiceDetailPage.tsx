@@ -152,7 +152,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
                         <>
                           <iframe
                             ref={(el) => { mediaRefs.current[project.id] = el; }}
-                            src={`${getVimeoEmbedUrl(project.videoUrl)}?autoplay=1`}
+                            src={getVimeoEmbedUrl(project.videoUrl, { autoplay: true, loop: true })}
                             title={project.title}
                             className="w-full h-full border-0"
                             allow="autoplay; fullscreen; picture-in-picture"
