@@ -2,7 +2,10 @@ import React from 'react';
 import { Maximize } from 'lucide-react';
 
 interface FullscreenButtonProps {
-  getTarget: () => HTMLElement | null | undefined;
+  getTarget?: () => HTMLElement | null | undefined;
+  // Escape hatch for callers that need to do something (e.g. swap a poster image over to a
+  // video element) before/instead of the default getTarget()-based fullscreen request.
+  onActivate?: (e: React.MouseEvent) => void;
   className?: string;
   label?: string;
 }
@@ -14,12 +17,17 @@ interface FullscreenButtonProps {
 // object per item isn't available.
 export const FullscreenButton: React.FC<FullscreenButtonProps> = ({
   getTarget,
+  onActivate,
   className = '',
   label = 'View full screen',
 }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    getTarget()?.requestFullscreen?.();
+    if (onActivate) {
+      onActivate(e);
+    } else {
+      getTarget?.()?.requestFullscreen?.();
+    }
   };
 
   return (

@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DoodleStar, DoodleSparkle } from './DoodleAccents';
 import { FullscreenButton } from './FullscreenButton';
+import { getVimeoEmbedUrl } from '../utils/vimeo';
 
 interface CasesSectionProps {
   onSelectProject: (project: Project) => void;
@@ -16,6 +17,7 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
   const [activeProjectIndex, setActiveProjectIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const posterImgRef = useRef<HTMLImageElement>(null);
+  const posterVideoRef = useRef<HTMLIFrameElement>(null);
 
   const categories = [
     { id: 'all', label: 'All' },
@@ -234,11 +236,31 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
 
+                  {/* Hidden until fullscreen is requested — src is only set at that moment, so
+                      nothing loads or plays in the background while just browsing the poster. */}
+                  {currentProject.videoUrl && (
+                    <iframe
+                      ref={posterVideoRef}
+                      title={currentProject.title}
+                      className="absolute inset-0 w-full h-full border-0 opacity-0 pointer-events-none"
+                      allow="autoplay; fullscreen; picture-in-picture"
+                      allowFullScreen
+                    />
+                  )}
+
                   {/* Dark Vignette Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                   <FullscreenButton
-                    getTarget={() => posterImgRef.current}
+                    onActivate={() => {
+                      if (currentProject.videoUrl && posterVideoRef.current) {
+                        const embedUrl = getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true });
+                        if (embedUrl) posterVideoRef.current.src = embedUrl;
+                        posterVideoRef.current.requestFullscreen?.();
+                      } else {
+                        posterImgRef.current?.requestFullscreen?.();
+                      }
+                    }}
                     className="absolute top-4 right-4 z-20 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                   />
 
