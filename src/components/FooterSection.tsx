@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { usePortfolio } from '../context/usePortfolio';
-import { Eraser, Pencil } from 'lucide-react';
+import { Eraser, Pencil, Send, Loader2, Check } from 'lucide-react';
 
 interface FooterSectionProps {
   onOpenContact?: () => void;
@@ -32,6 +32,10 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
   const [color, setColor] = useState('#000000'); // Default Black on White Canvas
   const [lineWidth, setLineWidth] = useState(4);
   const [drawMode, setDrawMode] = useState(false);
+  // Tracked separately from strokesRef (a plain ref) so the Send button can actually
+  // re-render enabled/disabled — refs alone don't trigger React updates.
+  const [hasDrawing, setHasDrawing] = useState(false);
+  const [sendStatus, setSendStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   // Resize canvas to fill the bounded doodle box (not the whole footer). Uses a
   // ResizeObserver on the box itself — not just a window resize listener — because the
@@ -155,12 +159,37 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
         opacity: 1
       });
       currentStrokeRef.current = [];
+      setHasDrawing(true);
     }
   };
 
   const handleClear = () => {
     strokesRef.current = [];
     currentStrokeRef.current = [];
+    setHasDrawing(false);
+  };
+
+  const handleSend = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas || sendStatus === 'sending') return;
+
+    setSendStatus('sending');
+    try {
+      const image = canvas.toDataURL('image/png');
+      const response = await fetch('/api/submit-doodle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image })
+      });
+      if (!response.ok) throw new Error('Request failed');
+
+      setSendStatus('sent');
+      handleClear();
+      setTimeout(() => setSendStatus('idle'), 3000);
+    } catch {
+      setSendStatus('error');
+      setTimeout(() => setSendStatus('idle'), 3000);
+    }
   };
 
   // Custom SVG Pencil Cursor with Hotspot at Tip (0 24)
@@ -231,6 +260,36 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
                     <span className="text-[10px] uppercase font-mono font-bold">Clear</span>
                   </button>
                 </div>
+              )}
+
+              {/* Send: only enabled once there's something drawn */}
+              {drawMode && hasDrawing && (
+                <button
+                  onClick={handleSend}
+                  disabled={sendStatus === 'sending'}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 border-black text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-70 ${
+                    sendStatus === 'sent' ? 'bg-emerald-500 text-white' : sendStatus === 'error' ? 'bg-red-500 text-white' : 'bg-white text-black hover:bg-neutral-100'
+                  }`}
+                >
+                  {sendStatus === 'sending' ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>sending...</span>
+                    </>
+                  ) : sendStatus === 'sent' ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>sent!</span>
+                    </>
+                  ) : sendStatus === 'error' ? (
+                    <span>couldn't send, try again</span>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5" />
+                      <span>send</span>
+                    </>
+                  )}
+                </button>
               )}
 
               {/* Pencil Toggle: drawing is only active while this is on */}
