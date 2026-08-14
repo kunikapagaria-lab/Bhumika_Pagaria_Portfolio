@@ -72,7 +72,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
               <p className="text-sm text-neutral-400 mt-2">Check back soon — more work is on the way.</p>
             </div>
           ) : isIllustrations ? (
-          <div className="grid grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-6 sm:gap-x-14 sm:gap-y-8">
             {displayProjects.map((project) => (
               <div key={project.id}>
                 <div
