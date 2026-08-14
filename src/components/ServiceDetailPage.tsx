@@ -95,7 +95,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <h2 className="mt-3 font-serif italic text-xl sm:text-2xl font-normal tracking-tight text-neutral-800 lowercase">
+                <h2 className="mt-3 font-serif italic text-xl sm:text-2xl font-normal tracking-tight text-neutral-800 lowercase text-center">
                   {project.title}
                 </h2>
               </div>
