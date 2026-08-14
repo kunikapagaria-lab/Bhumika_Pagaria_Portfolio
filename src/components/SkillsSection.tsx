@@ -1,9 +1,10 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { Star, Heart } from 'lucide-react';
 import { usePortfolio } from '../context/usePortfolio';
 
-// One consistent icon is used for every skill card, software and soft skills alike.
-const SkillIcon = Sparkles;
+// One fixed icon per section — every software tool gets a star, every soft skill gets a heart.
+const SoftwareIcon = Star;
+const SoftSkillIcon = Heart;
 
 export const SkillsSection: React.FC = () => {
   const portfolioData = usePortfolio();
@@ -84,7 +85,7 @@ export const SkillsSection: React.FC = () => {
                 className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
               >
                 <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
-                  <SkillIcon className="w-4 h-4 stroke-[2.5]" />
+                  <SoftwareIcon className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
                   {card.title}
@@ -111,7 +112,7 @@ export const SkillsSection: React.FC = () => {
                 className="bg-white text-black rounded-xl border-2 border-black px-4 py-3.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-3.5 group cursor-pointer"
               >
                 <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center flex-shrink-0 text-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-all duration-200">
-                  <SkillIcon className="w-4 h-4 stroke-[2.5]" />
+                  <SoftSkillIcon className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h4 className="font-display text-xs sm:text-sm font-black tracking-wide text-black uppercase leading-tight">
                   {card.title}

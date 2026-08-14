@@ -300,14 +300,19 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
             <a href="#about" className="hover:text-black transition-colors">About Me</a>
           </div>
 
-          <div className="pt-6 border-t border-black/15 flex items-center justify-center text-xs font-mono text-neutral-600">
+          <div className="pt-6 border-t border-black/15 flex flex-col items-center justify-center gap-1.5 text-xs font-mono text-neutral-600">
             <button
               onClick={onGoHome}
               className="font-display font-extrabold text-lg text-black tracking-wider cursor-pointer hover:opacity-70 transition-opacity"
               title="Back to homepage"
             >
-              bhumika pagaria
+              Bhumika Pagaria
             </button>
+            {(socialLinks as any).email && (
+              <span className="text-[11px] font-sans font-light text-neutral-400 tracking-wide">
+                {(socialLinks as any).email}
+              </span>
+            )}
           </div>
         </div>
 

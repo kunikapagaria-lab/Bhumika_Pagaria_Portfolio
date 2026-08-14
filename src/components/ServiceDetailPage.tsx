@@ -146,7 +146,9 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
                           }
                         }
                       }}
-                      className="rounded-3xl border-2 border-neutral-300/80 overflow-hidden shadow-xl bg-black aspect-video sm:aspect-[16/10] relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+                      className={`rounded-3xl border-2 border-neutral-300/80 overflow-hidden shadow-xl bg-black relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 ${
+                        project.category === 'illustrations' ? 'aspect-square' : 'aspect-video sm:aspect-[16/10]'
+                      }`}
                     >
                       {project.videoUrl && isPlaying ? (
                         <>

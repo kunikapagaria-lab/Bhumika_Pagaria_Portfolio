@@ -16,10 +16,7 @@ export const projectSchema = {
           { title: '2D Animation', value: '2d-animation' },
           { title: 'Illustrations', value: 'illustrations' },
           { title: 'Commercial Work', value: 'commercial-work' },
-          { title: 'Client Design', value: 'client-design' },
-          { title: 'Logo Design', value: 'logo-design' },
           { title: 'Odd Bits', value: 'odd-bits' },
-          { title: 'Others', value: 'others' },
         ]
       }
     },
@@ -81,10 +78,7 @@ export const serviceSchema = {
           { title: '2D Animation', value: '2d-animation' },
           { title: 'Illustrations', value: 'illustrations' },
           { title: 'Commercial Work', value: 'commercial-work' },
-          { title: 'Client Design', value: 'client-design' },
-          { title: 'Logo Design', value: 'logo-design' },
           { title: 'Odd Bits', value: 'odd-bits' },
-          { title: 'Others', value: 'others' },
         ]
       }
     }
@@ -119,9 +113,11 @@ export const personalInfoSchema = {
   fields: [
     { name: 'name', title: 'Full Name', type: 'string' },
     { name: 'tagline', title: 'Hero Tagline', type: 'string' },
+    { name: 'aboutHeading', title: 'About Me Heading', description: 'The big headline shown at the top of the About Me section — type it exactly as you want it to read, e.g. "Hi, I\'m Bhumika". Leave empty to just show your name.', type: 'string' },
     { name: 'bio', title: 'About Me Bio Paragraph', type: 'text' },
     { name: 'location', title: 'Location (e.g. London, UK)', type: 'string' },
     { name: 'education', title: 'Education & Degrees', description: 'Add one line per degree/qualification.', type: 'array', of: [{ type: 'string' }] },
+    { name: 'tags', title: 'Characteristics / Tags', description: 'Short pills shown under your bio, e.g. "freelancer", "cat lover". Add as many as you like.', type: 'array', of: [{ type: 'string' }] },
     { name: 'profileImage', title: 'Profile / Bio Photo', type: 'image', options: { hotspot: true } },
     { name: 'resumeFile', title: 'Resume / CV PDF Document (Upload PDF)', type: 'file', options: { accept: '.pdf' } },
     { name: 'resumeUrl', title: 'Resume / CV PDF External Link (Optional)', type: 'url' },

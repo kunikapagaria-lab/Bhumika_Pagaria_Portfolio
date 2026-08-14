@@ -87,9 +87,11 @@ export async function fetchSanityPortfolioData() {
       name,
       nickname,
       tagline,
+      aboutHeading,
       bio,
       location,
       education,
+      tags,
       "profileImage": profileImage.asset->url,
       "resumeFileUrl": resumeFile.asset->url,
       resumeUrl,
@@ -142,12 +144,15 @@ export async function fetchSanityPortfolioData() {
         nickname: personal?.nickname || (PORTFOLIO_DATA.personalInfo as any).nickname || '',
         role: PORTFOLIO_DATA.personalInfo.role,
         tagline: personal?.tagline || (PORTFOLIO_DATA.personalInfo as any).tagline || '',
+        aboutHeading: personal?.aboutHeading || '',
         bio: bioText || PORTFOLIO_DATA.personalInfo.bio,
         location: personal?.location || (PORTFOLIO_DATA.personalInfo as any).location || 'London, UK',
-        education: Array.isArray(personal?.education) && personal.education.length > 0 
-          ? personal.education.map((e: any) => extractText(e) || e) 
+        education: Array.isArray(personal?.education) && personal.education.length > 0
+          ? personal.education.map((e: any) => extractText(e) || e)
           : PORTFOLIO_DATA.personalInfo.education,
-        tags: (PORTFOLIO_DATA.personalInfo as any).tags || [],
+        tags: Array.isArray(personal?.tags) && personal.tags.length > 0
+          ? personal.tags
+          : (PORTFOLIO_DATA.personalInfo as any).tags || [],
         profileImage: personal?.profileImage || (PORTFOLIO_DATA.personalInfo as any).profileImage,
         resumeUrl: personal?.resumeFileUrl || personal?.resumeUrl || (PORTFOLIO_DATA.personalInfo as any).resumeUrl || '/bhumika_pagaria_cv.pdf',
         // Once a real personalInfo document exists in Sanity, each link is shown exactly as

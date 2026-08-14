@@ -9,9 +9,10 @@ type Slide =
 interface MediaCarouselProps {
   slides: Slide[];
   title: string;
+  square?: boolean;
 }
 
-export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) => {
+export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title, square }) => {
   const [index, setIndex] = useState(0);
   const mediaRef = useRef<HTMLImageElement | HTMLIFrameElement | null>(null);
 
@@ -23,7 +24,7 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
 
   return (
     <div className="mb-10">
-      <div className="rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black aspect-video relative">
+      <div className={`rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black relative ${square ? 'aspect-square' : 'aspect-video'}`}>
         {current.type === 'video' ? (
           <iframe
             ref={(el) => { mediaRef.current = el; }}

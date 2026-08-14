@@ -71,8 +71,9 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
           {project.subtitle}
         </p>
 
-        {/* Media Carousel: main image, gallery photos, and video (if any) in one swipeable set */}
-        <MediaCarousel title={project.title} slides={mediaSlides} />
+        {/* Media Carousel: main image, gallery photos, and video (if any) in one swipeable set.
+            Illustrations are square source images, so the frame stays square to avoid cropping. */}
+        <MediaCarousel title={project.title} slides={mediaSlides} square={project.category === 'illustrations'} />
 
         <div className="space-y-8 text-neutral-800 text-base leading-relaxed">
           <div>
