@@ -245,12 +245,13 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
 
                   {/* Loaded in the background (hidden behind the poster photo via negative
                       z-index, not opacity, so it still renders correctly once fullscreened)
-                      purely so the fullscreen button can play the real video — the poster
-                      itself always shows the photo. */}
+                      purely so the fullscreen button can show the real video ready to go —
+                      no autoplay, so it sits paused until the visitor presses play themselves,
+                      and nothing plays audibly while it's just sitting hidden behind the photo. */}
                   {currentProject.videoUrl && (
                     <iframe
                       ref={posterVideoRef}
-                      src={getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })}
+                      src={getVimeoEmbedUrl(currentProject.videoUrl, { loop: true })}
                       title={currentProject.title}
                       className="absolute inset-0 w-full h-full border-0 -z-10 pointer-events-none"
                       allow="autoplay; fullscreen; picture-in-picture"

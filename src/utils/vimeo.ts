@@ -3,7 +3,7 @@
 // iframe — the regular share-page URL cannot be embedded and silently fails to load.
 export function getVimeoEmbedUrl(
   url?: string,
-  options?: { autoplay?: boolean; loop?: boolean }
+  options?: { autoplay?: boolean; loop?: boolean; muted?: boolean }
 ): string | undefined {
   if (!url) return undefined;
   const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
@@ -14,6 +14,7 @@ export function getVimeoEmbedUrl(
   if (options?.autoplay) params.set('autoplay', '1');
   // Looping suppresses Vimeo's own "More from..." end screen — the video just restarts instead.
   if (options?.loop) params.set('loop', '1');
+  if (options?.muted) params.set('muted', '1');
 
   const query = params.toString();
   return `https://player.vimeo.com/video/${id}${query ? `?${query}` : ''}`;
