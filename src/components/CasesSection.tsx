@@ -228,32 +228,23 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                     }
                   }}
                 >
-                  {/* Poster Image */}
-                  <img
-                    ref={posterImgRef}
-                    src={currentProject.imageUrl}
-                    alt={currentProject.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-
-                  {/* Loads (silently, muted per browser autoplay policy) as soon as this poster
-                      becomes active, rather than waiting for the fullscreen click — requesting
-                      fullscreen right after setting the src left Vimeo no time to load, which is
-                      what caused the black screen. Preloading it here means it's already playing
-                      by the time anyone actually clicks fullscreen. */}
-                  {currentProject.videoUrl && (
+                  {/* Poster: the actual video plays here directly (looping) when one exists —
+                      the static photo is only a fallback for projects with no video at all. */}
+                  {currentProject.videoUrl ? (
                     <iframe
                       ref={posterVideoRef}
                       src={getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })}
                       title={currentProject.title}
-                      // Kept out of view by sitting behind the poster image (negative z-index),
-                      // not by opacity — opacity stays applied even once fullscreened, which is
-                      // what caused the black screen: the video was loaded, just invisible.
-                      // Stacking position, unlike opacity, stops applying the moment the browser
-                      // promotes this element into fullscreen.
-                      className="absolute inset-0 w-full h-full border-0 -z-10 pointer-events-none"
+                      className="absolute inset-0 w-full h-full border-0"
                       allow="autoplay; fullscreen; picture-in-picture"
                       allowFullScreen
+                    />
+                  ) : (
+                    <img
+                      ref={posterImgRef}
+                      src={currentProject.imageUrl}
+                      alt={currentProject.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                   )}
 
