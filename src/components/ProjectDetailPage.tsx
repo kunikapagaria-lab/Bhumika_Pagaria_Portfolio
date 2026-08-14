@@ -83,18 +83,6 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
             <p>{project.description}</p>
           </div>
 
-          {/* Full Report — headings, paragraphs, and photos, written in Sanity like a document */}
-          {project.fullReport && project.fullReport.length > 0 && (
-            <div>
-              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
-                Full Report
-              </h4>
-              <div className="bg-white p-5 sm:p-8 rounded-2xl border border-neutral-200">
-                <PortableText value={project.fullReport} components={reportComponents} />
-              </div>
-            </div>
-          )}
-
           {project.breakdown && project.breakdown.length > 0 && (
             <div>
               <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
@@ -123,6 +111,18 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
               ))}
             </div>
           </div>
+
+          {/* Full Report — headings, paragraphs, and photos, written in Sanity like a document */}
+          {project.fullReport && project.fullReport.length > 0 && (
+            <div>
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">
+                Full Report
+              </h4>
+              <div className="bg-white p-5 sm:p-8 rounded-2xl border border-neutral-200">
+                <PortableText value={project.fullReport} components={reportComponents} />
+              </div>
+            </div>
+          )}
 
           {project.link && (
             <div className="pt-4 border-t border-black/15">
