@@ -17,6 +17,8 @@ export interface Project {
   fullReport?: any[];
   // Controls the order projects appear within their matching service page. Lower shows first.
   order?: number;
+  // Whether this project shows up in the Highlights carousel — set per-project in Sanity.
+  isHighlight?: boolean;
 }
 
 export interface Service {

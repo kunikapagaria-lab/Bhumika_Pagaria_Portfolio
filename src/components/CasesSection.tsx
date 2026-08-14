@@ -29,9 +29,10 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
     { id: 'odd-bits', label: 'Odd Bits' },
   ];
 
-  const filteredProjects = selectedCategory === 'all' 
-    ? portfolioData.projects 
-    : portfolioData.projects.filter(p => p.category === selectedCategory);
+  const highlightProjects = portfolioData.projects.filter(p => p.isHighlight);
+  const filteredProjects = selectedCategory === 'all'
+    ? highlightProjects
+    : highlightProjects.filter(p => p.category === selectedCategory);
 
   const currentProject = filteredProjects.length > 0
     ? filteredProjects[activeProjectIndex % filteredProjects.length] || filteredProjects[0]
