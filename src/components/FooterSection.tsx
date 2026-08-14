@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { usePortfolio } from '../context/usePortfolio';
-import { Eraser, Pencil, Send, Loader2, Check } from 'lucide-react';
+import { Eraser, Trash2, Pencil, Send, Loader2, Check } from 'lucide-react';
 
 interface FooterSectionProps {
   onOpenContact?: () => void;
@@ -17,6 +17,7 @@ interface Stroke {
   color: string;
   width: number;
   opacity: number;
+  isEraser?: boolean;
 }
 
 export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
@@ -32,10 +33,12 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
   const [color, setColor] = useState('#000000'); // Default Black on White Canvas
   const [lineWidth, setLineWidth] = useState(4);
   const [drawMode, setDrawMode] = useState(false);
+  const [eraserMode, setEraserMode] = useState(false);
   // Tracked separately from strokesRef (a plain ref) so the Send button can actually
   // re-render enabled/disabled — refs alone don't trigger React updates.
   const [hasDrawing, setHasDrawing] = useState(false);
-  const [sendStatus, setSendStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [sendStatus, setSendStatus] = useState<'idle' | 'empty' | 'need-name' | 'sending' | 'sent' | 'error'>('idle');
+  const [senderName, setSenderName] = useState('');
 
   // Resize canvas to fill the bounded doodle box (not the whole footer). Uses a
   // ResizeObserver on the box itself — not just a window resize listener — because the
@@ -81,9 +84,12 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Render all saved strokes permanently until refreshed or cleared
+      // Render all saved strokes permanently until refreshed or cleared. Rendered in the
+      // exact order they were drawn, switching composite mode per stroke — that's what lets
+      // an eraser stroke only remove what was drawn before it, not strokes added afterward.
       strokesRef.current.forEach((stroke) => {
         ctx.beginPath();
+        ctx.globalCompositeOperation = stroke.isEraser ? 'destination-out' : 'source-over';
         ctx.strokeStyle = stroke.color;
         ctx.lineWidth = stroke.width;
         ctx.lineCap = 'round';
@@ -102,6 +108,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
       // Render currently active drawing stroke
       if (currentStrokeRef.current.length > 0) {
         ctx.beginPath();
+        ctx.globalCompositeOperation = eraserMode ? 'destination-out' : 'source-over';
         ctx.strokeStyle = color;
         ctx.lineWidth = lineWidth;
         ctx.lineCap = 'round';
@@ -121,7 +128,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
 
     animId = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animId);
-  }, [color, lineWidth]);
+  }, [color, lineWidth, eraserMode]);
 
   // Pointer event handlers
   const getCanvasCoords = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -156,10 +163,11 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
         points: [...currentStrokeRef.current],
         color,
         width: lineWidth,
-        opacity: 1
+        opacity: 1,
+        isEraser: eraserMode
       });
       currentStrokeRef.current = [];
-      setHasDrawing(true);
+      if (!eraserMode) setHasDrawing(true);
     }
   };
 
@@ -167,6 +175,18 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
     strokesRef.current = [];
     currentStrokeRef.current = [];
     setHasDrawing(false);
+  };
+
+  // First click on Send: bail out with a brief message if there's nothing drawn yet, or
+  // reveal the name field if there is. The actual submission happens from that field's own
+  // confirm button (handleSend below).
+  const handleSendClick = () => {
+    if (!hasDrawing) {
+      setSendStatus('empty');
+      setTimeout(() => setSendStatus('idle'), 3000);
+      return;
+    }
+    setSendStatus('need-name');
   };
 
   const handleSend = async () => {
@@ -191,12 +211,13 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
       const response = await fetch('/api/submit-doodle', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image })
+        body: JSON.stringify({ image, name: senderName })
       });
       if (!response.ok) throw new Error('Request failed');
 
       setSendStatus('sent');
       handleClear();
+      setSenderName('');
       setTimeout(() => setSendStatus('idle'), 3000);
     } catch {
       setSendStatus('error');
@@ -224,25 +245,43 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
               {/* Color & Brush Controls only shown while actively drawing */}
               {drawMode && (
                 <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="flex items-center gap-1.5 border-r border-black/20 pr-3">
+                  <div className="flex items-center gap-1.5 border-r border-black/20 pr-3 flex-wrap">
                     {[
                       { hex: '#000000', label: 'Black' },
                       { hex: '#ef4444', label: 'Red' },
+                      { hex: '#f97316', label: 'Orange' },
+                      { hex: '#eab308', label: 'Yellow' },
+                      { hex: '#10b981', label: 'Green' },
+                      { hex: '#06b6d4', label: 'Cyan' },
                       { hex: '#3b82f6', label: 'Blue' },
                       { hex: '#a855f7', label: 'Purple' },
                       { hex: '#ec4899', label: 'Pink' },
-                      { hex: '#10b981', label: 'Green' }
+                      { hex: '#78350f', label: 'Brown' },
+                      { hex: '#6b7280', label: 'Gray' }
                     ].map((c) => (
                       <button
                         key={c.hex}
-                        onClick={() => setColor(c.hex)}
+                        onClick={() => {
+                          setColor(c.hex);
+                          setEraserMode(false);
+                        }}
                         style={{ backgroundColor: c.hex }}
                         className={`w-5 h-5 rounded-full border border-black transition-transform cursor-pointer ${
-                          color === c.hex ? 'scale-125 ring-2 ring-black' : 'opacity-80 hover:opacity-100'
+                          !eraserMode && color === c.hex ? 'scale-125 ring-2 ring-black' : 'opacity-80 hover:opacity-100'
                         }`}
                         title={c.label}
                       />
                     ))}
+
+                    <button
+                      onClick={() => setEraserMode(true)}
+                      className={`w-6 h-6 rounded-full border border-black flex items-center justify-center transition-transform cursor-pointer bg-white ${
+                        eraserMode ? 'scale-125 ring-2 ring-black' : 'opacity-80 hover:opacity-100'
+                      }`}
+                      title="Eraser — erase just one part of the drawing"
+                    >
+                      <Eraser className="w-3.5 h-3.5 text-black" />
+                    </button>
                   </div>
 
                   <div className="flex items-center gap-1.5 border-r border-black/20 pr-3 text-xs font-mono">
@@ -266,21 +305,40 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
                   <button
                     onClick={handleClear}
                     className="flex items-center gap-1 text-xs text-neutral-700 hover:text-black transition-colors cursor-pointer font-bold"
-                    title="Clear Canvas"
+                    title="Clear entire canvas"
                   >
-                    <Eraser className="w-3.5 h-3.5" />
+                    <Trash2 className="w-3.5 h-3.5" />
                     <span className="text-[10px] uppercase font-mono font-bold">Clear</span>
                   </button>
                 </div>
               )}
 
-              {/* Send: only enabled once there's something drawn */}
-              {drawMode && hasDrawing && (
+              {/* Send: always visible. Clicking with nothing drawn just shows a brief nudge;
+                  clicking with a drawing reveals the name field before actually sending. */}
+              {sendStatus === 'need-name' ? (
+                <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                  <input
+                    type="text"
+                    value={senderName}
+                    onChange={(e) => setSenderName(e.target.value)}
+                    placeholder="your name"
+                    autoFocus
+                    className="w-28 sm:w-36 px-2 py-1 text-xs font-mono border border-black rounded-full focus:outline-none"
+                  />
+                  <button
+                    onClick={handleSend}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-black bg-black text-white text-xs font-bold uppercase tracking-wider cursor-pointer hover:bg-neutral-800 transition-colors"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>send</span>
+                  </button>
+                </div>
+              ) : (
                 <button
-                  onClick={handleSend}
+                  onClick={handleSendClick}
                   disabled={sendStatus === 'sending'}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 border-black text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-70 ${
-                    sendStatus === 'sent' ? 'bg-emerald-500 text-white' : sendStatus === 'error' ? 'bg-red-500 text-white' : 'bg-white text-black hover:bg-neutral-100'
+                    sendStatus === 'sent' ? 'bg-emerald-500 text-white' : sendStatus === 'error' || sendStatus === 'empty' ? 'bg-red-500 text-white' : 'bg-white text-black hover:bg-neutral-100'
                   }`}
                 >
                   {sendStatus === 'sending' ? (
@@ -295,6 +353,8 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
                     </>
                   ) : sendStatus === 'error' ? (
                     <span>couldn't send, try again</span>
+                  ) : sendStatus === 'empty' ? (
+                    <span>draw something first</span>
                   ) : (
                     <>
                       <Send className="w-3.5 h-3.5" />

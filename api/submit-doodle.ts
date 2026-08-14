@@ -21,7 +21,7 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  const { image } = req.body || {};
+  const { image, name } = req.body || {};
   if (typeof image !== 'string' || !image.startsWith('data:image/')) {
     res.status(400).json({ error: 'Missing or invalid image data.' });
     return;
@@ -42,6 +42,7 @@ export default async function handler(req: any, res: any) {
         _type: 'image',
         asset: { _type: 'reference', _ref: asset._id },
       },
+      senderName: typeof name === 'string' && name.trim() ? name.trim() : 'Anonymous',
       submittedAt: new Date().toISOString(),
     });
 

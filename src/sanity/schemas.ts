@@ -151,6 +151,7 @@ export const doodleSubmissionSchema = {
   description: 'Private — not shown anywhere on the site. Visitor doodles land here for you to keep or delete.',
   fields: [
     { name: 'image', title: 'Doodle Image', type: 'image' },
+    { name: 'senderName', title: 'Sent By', type: 'string' },
     { name: 'submittedAt', title: 'Submitted At', type: 'datetime' }
   ]
 };
