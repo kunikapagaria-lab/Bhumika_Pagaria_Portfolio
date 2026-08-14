@@ -6,7 +6,6 @@ export const AboutMeSection: React.FC = () => {
   const { name, bio, tags, education, socialLinks } = portfolioData.personalInfo;
   const aboutHeading = (portfolioData.personalInfo as any).aboutHeading;
   const linkedinUrl = (socialLinks as any)?.linkedin;
-  const linkedinLabel = linkedinUrl ? linkedinUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : '';
 
   return (
     <section id="about" className="snap-start scroll-mt-20 pt-8 pb-16 md:pt-10 md:pb-20 bg-white border-t border-neutral-200">
@@ -30,7 +29,7 @@ export const AboutMeSection: React.FC = () => {
                 rel="noopener noreferrer"
                 className="inline-block px-5 py-1.5 rounded-full border-2 border-black bg-neutral-100 text-xs font-bold uppercase tracking-wider text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-colors"
               >
-                {linkedinLabel}
+                Connect
               </a>
             </div>
           )}
