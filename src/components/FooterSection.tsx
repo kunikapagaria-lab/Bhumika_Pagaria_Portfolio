@@ -175,7 +175,19 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
 
     setSendStatus('sending');
     try {
-      const image = canvas.toDataURL('image/png');
+      // The live canvas is transparent (so it blends with the box while drawing), but a
+      // transparent PNG looks broken/invisible against Sanity Studio's dark theme — so
+      // composite it onto a solid white background just for the exported copy.
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = canvas.width;
+      exportCanvas.height = canvas.height;
+      const exportCtx = exportCanvas.getContext('2d');
+      if (!exportCtx) throw new Error('Could not prepare image');
+      exportCtx.fillStyle = '#ffffff';
+      exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+      exportCtx.drawImage(canvas, 0, 0);
+
+      const image = exportCanvas.toDataURL('image/png');
       const response = await fetch('/api/submit-doodle', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
