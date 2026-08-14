@@ -17,6 +17,8 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
   const [playingVideoMap, setPlayingVideoMap] = useState<Record<string, boolean>>({});
   // Keyed by project id — each row's image or video element registers itself here as it mounts.
   const mediaRefs = useRef<Record<string, HTMLElement | null>>({});
+  // Same idea, for the Illustrations grid's thumbnails specifically.
+  const illustrationRefs = useRef<Record<string, HTMLImageElement | null>>({});
 
   const togglePlayVideo = (projectId: string) => {
     setPlayingVideoMap((prev) => ({
@@ -31,6 +33,9 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
   const displayProjects = portfolioData.projects
     .filter((p) => p.category === matchKey)
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  // Illustrations are single images with just a title — no write-up or breakdown to expand
+  // into — so they get a simple photo-grid instead of the full case-study row layout below.
+  const isIllustrations = matchKey === 'illustrations';
 
   return (
     <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 flex flex-col justify-between pt-24 pb-16">
@@ -59,12 +64,35 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
           {/* Subtle Horizontal Divider Line */}
           <div className="w-full h-px bg-neutral-300/70 my-12 sm:my-16" />
 
-          {/* Alternating Project Showcase Rows for ALL Services */}
+          {/* Alternating Project Showcase Rows for ALL Services (Illustrations gets its own
+              simple photo-grid layout instead — see below) */}
           {displayProjects.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-lg sm:text-xl font-medium text-neutral-500">No projects in this category yet.</p>
               <p className="text-sm text-neutral-400 mt-2">Check back soon — more work is on the way.</p>
             </div>
+          ) : isIllustrations ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {displayProjects.map((project) => (
+              <div key={project.id}>
+                <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-black bg-neutral-100 group">
+                  <img
+                    ref={(el) => { illustrationRefs.current[project.id] = el; }}
+                    src={project.imageUrl}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <FullscreenButton
+                    getTarget={() => illustrationRefs.current[project.id]}
+                    className="absolute top-3 right-3 z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                  />
+                </div>
+                <p className="mt-2.5 text-sm font-semibold text-neutral-800 text-center truncate">
+                  {project.title}
+                </p>
+              </div>
+            ))}
+          </div>
           ) : (
           <div className="space-y-20 sm:space-y-28">
             {displayProjects.map((project, index) => {
