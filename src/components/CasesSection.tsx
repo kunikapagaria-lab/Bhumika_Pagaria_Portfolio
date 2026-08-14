@@ -84,7 +84,7 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
             <span className="font-display text-2xl sm:text-3xl font-light tracking-tight text-neutral-500 block mb-1">
               (highlights)
             </span>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-300 whitespace-nowrap">
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-neutral-300 whitespace-nowrap">
               featured portfolio works
             </h2>
           </div>

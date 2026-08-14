@@ -62,7 +62,7 @@ export const SkillsSection: React.FC = () => {
             <span className="font-display text-2xl sm:text-3xl font-light tracking-tight text-neutral-500 block mb-1">
               (skills)
             </span>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-black">
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-black">
               software tools and soft skills
             </h2>
           </div>

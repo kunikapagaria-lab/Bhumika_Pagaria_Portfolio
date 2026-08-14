@@ -59,7 +59,7 @@ export const TestimonialsSection: React.FC = () => {
             <span className="font-display text-2xl sm:text-3xl font-light tracking-tight text-neutral-500 block mb-1">
               (kind words)
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black">
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-black">
               client & collaborator testimonials
             </h2>
           </div>
