@@ -236,11 +236,15 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
 
-                  {/* Hidden until fullscreen is requested — src is only set at that moment, so
-                      nothing loads or plays in the background while just browsing the poster. */}
+                  {/* Loads (silently, muted per browser autoplay policy) as soon as this poster
+                      becomes active, rather than waiting for the fullscreen click — requesting
+                      fullscreen right after setting the src left Vimeo no time to load, which is
+                      what caused the black screen. Preloading it here means it's already playing
+                      by the time anyone actually clicks fullscreen. */}
                   {currentProject.videoUrl && (
                     <iframe
                       ref={posterVideoRef}
+                      src={getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })}
                       title={currentProject.title}
                       className="absolute inset-0 w-full h-full border-0 opacity-0 pointer-events-none"
                       allow="autoplay; fullscreen; picture-in-picture"
@@ -254,8 +258,6 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                   <FullscreenButton
                     onActivate={() => {
                       if (currentProject.videoUrl && posterVideoRef.current) {
-                        const embedUrl = getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true });
-                        if (embedUrl) posterVideoRef.current.src = embedUrl;
                         posterVideoRef.current.requestFullscreen?.();
                       } else {
                         posterImgRef.current?.requestFullscreen?.();
