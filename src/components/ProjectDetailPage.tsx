@@ -51,9 +51,9 @@ const reportComponents: PortableTextComponents = {
 
 export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project }) => {
   const mediaSlides = [
+    ...(project.videoUrl ? [{ type: 'video' as const, url: getVimeoEmbedUrl(project.videoUrl, { loop: true })! }] : []),
     { type: 'image' as const, url: project.imageUrl, alt: project.title },
     ...(project.gallery || []).map((g) => ({ type: 'image' as const, url: g.url, alt: g.alt || project.title })),
-    ...(project.videoUrl ? [{ type: 'video' as const, url: getVimeoEmbedUrl(project.videoUrl, { loop: true })! }] : []),
   ];
 
   return (
