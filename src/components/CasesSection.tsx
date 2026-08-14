@@ -80,32 +80,38 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
         
         {/* Section Heading & Category Filter Bar */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 gap-6 border-b border-neutral-900 pb-6">
-          <div>
+          <div className="md:flex-1 min-w-0">
             <span className="font-display text-2xl sm:text-3xl font-light tracking-tight text-neutral-500 block mb-1">
               (highlights)
             </span>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-300">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-300 whitespace-nowrap">
               featured portfolio works
             </h2>
           </div>
 
-          {/* Filter Pills matching reference mockup style */}
-          <div className="flex flex-wrap gap-2.5 sm:gap-3">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  setSelectedCategory(cat.id);
-                  setActiveProjectIndex(0);
-                }}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                  selectedCategory === cat.id
-                    ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-105'
-                    : 'bg-neutral-900 text-neutral-400 border border-neutral-800 hover:text-white hover:border-neutral-600'
-                }`}
-              >
-                {cat.label}
-              </button>
+          {/* Filter Pills split into two evenly-sized rows (4 then 3) instead of free-wrapping,
+              which also keeps this block's width predictable so the heading has room to stay
+              on one line. */}
+          <div className="flex flex-col gap-2.5 sm:gap-3 md:flex-shrink-0">
+            {[categories.slice(0, 4), categories.slice(4)].map((row, rowIdx) => (
+              <div key={rowIdx} className="flex flex-wrap gap-2.5 sm:gap-3">
+                {row.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      setSelectedCategory(cat.id);
+                      setActiveProjectIndex(0);
+                    }}
+                    className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                      selectedCategory === cat.id
+                        ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-105'
+                        : 'bg-neutral-900 text-neutral-400 border border-neutral-800 hover:text-white hover:border-neutral-600'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             ))}
           </div>
         </div>
