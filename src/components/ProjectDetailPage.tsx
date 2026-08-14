@@ -1,13 +1,15 @@
 import React, { useRef } from 'react';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
-import { type Project } from '../data/portfolioData';
+import { type Project, type Service } from '../data/portfolioData';
 import { ExternalLink, CheckCircle2 } from 'lucide-react';
 import { FullscreenButton } from './FullscreenButton';
 import { MediaCarousel } from './MediaCarousel';
 import { getVimeoEmbedUrl } from '../utils/vimeo';
+import { usePortfolio } from '../context/usePortfolio';
 
 interface ProjectDetailPageProps {
   project: Project;
+  onSelectService?: (service: Service) => void;
 }
 
 // A full-bleed image block within the rich report — its own fullscreen button, same as
@@ -49,7 +51,12 @@ const reportComponents: PortableTextComponents = {
   },
 };
 
-export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project }) => {
+export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project, onSelectService }) => {
+  const portfolioData = usePortfolio();
+  // Same matching rule used everywhere else — a service's categoryTag (or, failing that, its
+  // own id) lines up with a project's category.
+  const matchingService = portfolioData.services.find((s) => (s.categoryTag || s.id) === project.category);
+
   const mediaSlides = [
     ...(project.videoUrl ? [{ type: 'video' as const, url: getVimeoEmbedUrl(project.videoUrl, { loop: true })! }] : []),
     { type: 'image' as const, url: project.imageUrl, alt: project.title },
@@ -60,9 +67,19 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project })
     <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 pt-24 pb-16">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
 
-        <span className="tag-pill mb-4 inline-block">
-          {project.category.replace('-', ' ')}
-        </span>
+        {matchingService && onSelectService ? (
+          <button
+            onClick={() => onSelectService(matchingService)}
+            className="tag-pill mb-4 inline-block cursor-pointer hover:bg-black hover:text-white transition-colors"
+            title={`View ${matchingService.title} service page`}
+          >
+            {project.category.replace('-', ' ')}
+          </button>
+        ) : (
+          <span className="tag-pill mb-4 inline-block">
+            {project.category.replace('-', ' ')}
+          </span>
+        )}
 
         <h1 className="font-display text-4xl sm:text-6xl font-black tracking-tight text-black mb-2">
           {project.title}

@@ -151,7 +151,7 @@ export function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <ProjectDetailPage project={activeProject} />
+            <ProjectDetailPage project={activeProject} onSelectService={handleSelectService} />
           </motion.div>
         ) : activeService ? (
           <motion.div
