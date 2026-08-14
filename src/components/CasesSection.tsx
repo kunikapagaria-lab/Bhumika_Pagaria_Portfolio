@@ -246,7 +246,12 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                       ref={posterVideoRef}
                       src={getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })}
                       title={currentProject.title}
-                      className="absolute inset-0 w-full h-full border-0 opacity-0 pointer-events-none"
+                      // Kept out of view by sitting behind the poster image (negative z-index),
+                      // not by opacity — opacity stays applied even once fullscreened, which is
+                      // what caused the black screen: the video was loaded, just invisible.
+                      // Stacking position, unlike opacity, stops applying the moment the browser
+                      // promotes this element into fullscreen.
+                      className="absolute inset-0 w-full h-full border-0 -z-10 pointer-events-none"
                       allow="autoplay; fullscreen; picture-in-picture"
                       allowFullScreen
                     />
