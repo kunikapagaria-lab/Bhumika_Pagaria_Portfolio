@@ -228,23 +228,26 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                     }
                   }}
                 >
-                  {/* Poster: the actual video plays here directly (looping) when one exists —
-                      the static photo is only a fallback for projects with no video at all. */}
-                  {currentProject.videoUrl ? (
+                  {/* Poster Image */}
+                  <img
+                    ref={posterImgRef}
+                    src={currentProject.imageUrl}
+                    alt={currentProject.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+
+                  {/* Loaded in the background (hidden behind the poster photo via negative
+                      z-index, not opacity, so it still renders correctly once fullscreened)
+                      purely so the fullscreen button can play the real video — the poster
+                      itself always shows the photo. */}
+                  {currentProject.videoUrl && (
                     <iframe
                       ref={posterVideoRef}
                       src={getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })}
                       title={currentProject.title}
-                      className="absolute inset-0 w-full h-full border-0"
+                      className="absolute inset-0 w-full h-full border-0 -z-10 pointer-events-none"
                       allow="autoplay; fullscreen; picture-in-picture"
                       allowFullScreen
-                    />
-                  ) : (
-                    <img
-                      ref={posterImgRef}
-                      src={currentProject.imageUrl}
-                      alt={currentProject.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                   )}
 
