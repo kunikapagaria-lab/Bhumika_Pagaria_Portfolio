@@ -143,3 +143,14 @@ export const testimonialSchema = {
     { name: 'isApproved', title: 'Approved by Bhumika? (Show on Whiteboard)', type: 'boolean', initialValue: false }
   ]
 };
+
+export const doodleSubmissionSchema = {
+  name: 'doodleSubmission',
+  title: 'Doodle Submissions',
+  type: 'document',
+  description: 'Private — not shown anywhere on the site. Visitor doodles land here for you to keep or delete.',
+  fields: [
+    { name: 'image', title: 'Doodle Image', type: 'image' },
+    { name: 'submittedAt', title: 'Submitted At', type: 'datetime' }
+  ]
+};

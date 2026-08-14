@@ -1,6 +1,6 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
-import { projectSchema, serviceSchema, skillSchema, personalInfoSchema, testimonialSchema } from './src/sanity/schemas';
+import { projectSchema, serviceSchema, skillSchema, personalInfoSchema, testimonialSchema, doodleSubmissionSchema } from './src/sanity/schemas';
 
 export default defineConfig({
   name: 'bhumika-portfolio-studio',
@@ -12,6 +12,6 @@ export default defineConfig({
   plugins: [structureTool()],
 
   schema: {
-    types: [projectSchema, serviceSchema, skillSchema, personalInfoSchema, testimonialSchema],
+    types: [projectSchema, serviceSchema, skillSchema, personalInfoSchema, testimonialSchema, doodleSubmissionSchema],
   },
 });
