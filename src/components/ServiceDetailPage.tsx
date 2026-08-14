@@ -72,24 +72,32 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({ service, o
               <p className="text-sm text-neutral-400 mt-2">Check back soon — more work is on the way.</p>
             </div>
           ) : isIllustrations ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 gap-6 sm:gap-8">
             {displayProjects.map((project) => (
               <div key={project.id}>
-                <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-black bg-neutral-100 group">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View ${project.title} full screen`}
+                  onClick={() => illustrationRefs.current[project.id]?.requestFullscreen?.()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      illustrationRefs.current[project.id]?.requestFullscreen?.();
+                    }
+                  }}
+                  className="relative aspect-square rounded-3xl overflow-hidden border-2 border-black bg-neutral-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+                >
                   <img
                     ref={(el) => { illustrationRefs.current[project.id] = el; }}
                     src={project.imageUrl}
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <FullscreenButton
-                    getTarget={() => illustrationRefs.current[project.id]}
-                    className="absolute top-3 right-3 z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                  />
                 </div>
-                <p className="mt-2.5 text-sm font-semibold text-neutral-800 text-center truncate">
+                <h2 className="mt-3 font-serif italic text-xl sm:text-2xl font-normal tracking-tight text-neutral-800 lowercase">
                   {project.title}
-                </p>
+                </h2>
               </div>
             ))}
           </div>
