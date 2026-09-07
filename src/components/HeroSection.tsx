@@ -49,12 +49,12 @@ export const HeroSection: React.FC<HeroSectionProps> = () => {
 
       </div>
 
-      {/* Bottom Center Scroll Cue — same circular arrow-badge style used on the service cards, now an actual button that jumps to Services */}
+      {/* Bottom Center Scroll Cue — same circular arrow-badge style used on the service cards, now an actual button that jumps to the next section (About Me) */}
       <button
-        onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 md:bottom-10 z-20 w-12 h-12 rounded-full border-2 border-black bg-white text-black flex items-center justify-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] cursor-pointer hover:-translate-x-1/2 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-        aria-label="Scroll to Services"
-        title="Scroll to Services"
+        aria-label="Scroll to About Me"
+        title="Scroll to About Me"
       >
         <ArrowDown className="w-6 h-6" />
       </button>

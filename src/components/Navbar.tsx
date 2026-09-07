@@ -10,6 +10,7 @@ const navLayoutTransition = { duration: 0.35, ease: 'easeInOut' as const };
 
 interface NavbarProps {
   onOpenContact: () => void;
+  onOpenCV: () => void;
   onBackClick?: () => void;
   onSelectService?: (service: Service) => void;
   onGoHome?: () => void;
@@ -18,13 +19,13 @@ interface NavbarProps {
 
 const navLinks = [
   { label: 'home', href: '#hero' },
+  { label: 'about me', href: '#about' },
   { label: 'services', href: '#services' },
   { label: 'highlight', href: '#cases' },
   { label: 'skills', href: '#skills' },
-  { label: 'about me', href: '#about' },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSelectService, onGoHome, isDetailView }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenCV, onBackClick, onSelectService, onGoHome, isDetailView }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
@@ -33,7 +34,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSe
   const headerRef = useRef<HTMLElement | null>(null);
 
   const portfolioData = usePortfolio();
-  const resumeUrl = (portfolioData.personalInfo as any)?.resumeUrl || '/bhumika_pagaria_cv.pdf';
   const services = portfolioData.services || [];
 
   // At the very top of the homepage the hero already shows the name in giant type, so the nav
@@ -196,17 +196,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSe
           {/* Right CTA & Controls (desktop) */}
           <div className="hidden lg:flex items-center space-x-4">
 
-            {/* Clickable CV PDF Link */}
-            <a
-              href={resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            {/* Opens the quick CV preview modal */}
+            <button
+              onClick={onOpenCV}
               className="text-xs font-mono font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1.5 cursor-pointer"
-              title="Open Bhumika's CV Resume PDF"
+              title="View Bhumika's CV"
             >
               <FileText className="w-3.5 h-3.5" />
               <span>CV</span>
-            </a>
+            </button>
 
             <button
               onClick={onOpenContact}
@@ -219,15 +217,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSe
 
           {/* Mobile Menu Toggle Button */}
           <div className="flex items-center space-x-3 lg:hidden">
-            <a
-              href={resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={onOpenCV}
               className="text-xs font-mono font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center gap-1 cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5" />
               <span>CV</span>
-            </a>
+            </button>
 
             <button
               onClick={onOpenContact}
@@ -315,15 +311,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onBackClick, onSe
               );
             })}
 
-            <a
-              href={resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-lg font-bold text-black hover:bg-neutral-100 px-4 py-2 rounded-xl border-2 border-black flex items-center gap-2 bg-amber-200"
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenCV();
+              }}
+              className="text-lg font-bold text-black hover:bg-neutral-100 px-4 py-2 rounded-xl border-2 border-black flex items-center gap-2 bg-amber-200 cursor-pointer w-full"
             >
               <FileText className="w-5 h-5" />
-              <span>Open Bhumika's CV (PDF)</span>
-            </a>
+              <span>View Bhumika's CV</span>
+            </button>
           </div>
         </div>
       )}

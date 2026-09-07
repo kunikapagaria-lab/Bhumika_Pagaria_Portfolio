@@ -4,7 +4,7 @@ import { type Project, type Service } from '../data/portfolioData';
 import { ExternalLink, CheckCircle2 } from 'lucide-react';
 import { FullscreenButton } from './FullscreenButton';
 import { MediaCarousel } from './MediaCarousel';
-import { getVimeoEmbedUrl } from '../utils/vimeo';
+import { getProjectMediaSlides } from '../utils/media';
 import { usePortfolio } from '../context/usePortfolio';
 
 interface ProjectDetailPageProps {
@@ -57,11 +57,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project, o
   // own id) lines up with a project's category.
   const matchingService = portfolioData.services.find((s) => (s.categoryTag || s.id) === project.category);
 
-  const mediaSlides = [
-    ...(project.videoUrl ? [{ type: 'video' as const, url: getVimeoEmbedUrl(project.videoUrl, { loop: true })! }] : []),
-    { type: 'image' as const, url: project.imageUrl, alt: project.title },
-    ...(project.gallery || []).map((g) => ({ type: 'image' as const, url: g.url, alt: g.alt || project.title })),
-  ];
+  const mediaSlides = getProjectMediaSlides(project);
 
   return (
     <div className="min-h-screen bg-[#faf8f5] text-black animate-in fade-in duration-300 pt-24 pb-16">
@@ -88,9 +84,8 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ project, o
           {project.subtitle}
         </p>
 
-        {/* Media Carousel: main image, gallery photos, and video (if any) in one swipeable set.
-            Illustrations are square source images, so the frame stays square to avoid cropping. */}
-        <MediaCarousel title={project.title} slides={mediaSlides} square={project.category === 'illustrations'} />
+        {/* Media Carousel: main image, gallery photos, and video (if any) in one swipeable set. */}
+        <MediaCarousel title={project.title} slides={mediaSlides} />
 
         <div className="space-y-8 text-neutral-800 text-base leading-relaxed">
           <div>

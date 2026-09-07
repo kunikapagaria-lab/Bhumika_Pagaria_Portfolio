@@ -235,12 +235,14 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                     }
                   }}
                 >
-                  {/* Poster Image */}
+                  {/* Poster Image — object-contain so the artwork's own aspect ratio is kept
+                      intact (letterboxed on the card's black background) rather than cropped
+                      to fill the frame. */}
                   <img
                     ref={posterImgRef}
                     src={currentProject.imageUrl}
                     alt={currentProject.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
                   />
 
                   {/* Loaded in the background (hidden behind the poster photo via negative

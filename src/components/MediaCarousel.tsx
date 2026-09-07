@@ -1,6 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FullscreenButton } from './FullscreenButton';
+import { fetchVimeoMeta, type VimeoMeta } from '../utils/vimeo';
 
 type Slide =
   | { type: 'image'; url: string; alt?: string }
@@ -9,12 +11,28 @@ type Slide =
 interface MediaCarouselProps {
   slides: Slide[];
   title: string;
-  square?: boolean;
 }
 
-export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title, square }) => {
+const MAX_HEIGHT_CLASS = 'max-h-[60vh] sm:max-h-[65vh]';
+
+export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) => {
   const [index, setIndex] = useState(0);
-  const mediaRef = useRef<HTMLImageElement | HTMLIFrameElement | null>(null);
+  // Keyed by video slide URL, from Vimeo's oEmbed data — lets a portrait or square video size
+  // itself at its own true shape instead of an assumed 16:9.
+  const [videoMeta, setVideoMeta] = useState<Record<string, VimeoMeta>>({});
+  const [mediaEl, setMediaEl] = useState<HTMLImageElement | HTMLIFrameElement | null>(null);
+
+  useLayoutEffect(() => {
+    slides
+      .filter((s): s is Slide & { type: 'video' } => s.type === 'video')
+      .forEach((slide) => {
+        if (slide.url in videoMeta) return;
+        fetchVimeoMeta(slide.url).then((meta) => {
+          setVideoMeta((prev) => ({ ...prev, [slide.url]: meta }));
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slides]);
 
   if (slides.length === 0) return null;
 
@@ -24,44 +42,61 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title, squ
 
   return (
     <div className="mb-10">
-      <div className={`rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black relative ${square ? 'aspect-square' : 'aspect-video'}`}>
-        {current.type === 'video' ? (
-          <iframe
-            ref={(el) => { mediaRef.current = el; }}
-            src={current.url}
-            title={title}
-            className="w-full h-full border-0"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-          />
-        ) : (
-          <img
-            ref={(el) => { mediaRef.current = el; }}
-            src={current.url}
-            alt={current.alt || title}
-            className="w-full h-full object-cover"
-          />
+      {/* No frame, no letterbox fill — the visible box is exactly the artwork's own shape.
+          Arrows live in reserved side gutters (the px-12/px-14 padding below) rather than as
+          flex siblings competing for space with the box, so they never force the box to shrink
+          out of its true aspect ratio, and never overlap the media either. */}
+      <div className="relative px-11 sm:px-14">
+        {slides.length > 1 && (
+          <button
+            onClick={goPrev}
+            className="absolute left-0 sm:left-1 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-black border-2 border-black flex items-center justify-center hover:bg-neutral-100 transition-colors cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            aria-label="Previous media"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
         )}
 
-        <FullscreenButton getTarget={() => mediaRef.current} className="absolute top-4 right-4 z-10" />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current.url}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className={`relative mx-auto max-w-full ${MAX_HEIGHT_CLASS} w-fit rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black`}
+            style={{ aspectRatio: current.type === 'video' ? (videoMeta[current.url]?.ratio ?? 16 / 9) : undefined }}
+          >
+            {current.type === 'video' ? (
+              <iframe
+                ref={setMediaEl}
+                src={current.url}
+                title={title}
+                className="block w-full h-full border-0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <img
+                ref={setMediaEl}
+                src={current.url}
+                alt={current.alt || title}
+                className={`block w-auto h-auto max-w-full ${MAX_HEIGHT_CLASS}`}
+              />
+            )}
+
+            <FullscreenButton getTarget={() => mediaEl} className="absolute top-4 right-4 z-10" />
+          </motion.div>
+        </AnimatePresence>
 
         {slides.length > 1 && (
-          <>
-            <button
-              onClick={goPrev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 text-black border-2 border-black flex items-center justify-center hover:bg-white transition-colors cursor-pointer"
-              aria-label="Previous media"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={goNext}
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 text-black border-2 border-black flex items-center justify-center hover:bg-white transition-colors cursor-pointer"
-              aria-label="Next media"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </>
+          <button
+            onClick={goNext}
+            className="absolute right-0 sm:right-1 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-black border-2 border-black flex items-center justify-center hover:bg-neutral-100 transition-colors cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+            aria-label="Next media"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         )}
       </div>
 

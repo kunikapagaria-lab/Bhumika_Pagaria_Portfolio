@@ -33,6 +33,16 @@
   min-height: 100vh;
 }
 
+/* Artwork must never be stretched or cropped when a viewer sends an image/video into browser
+   fullscreen (FullscreenButton, or the illustrations grid) — the element's own w-full h-full
+   object-cover classes stay applied there, which without this rule fills the whole screen by
+   distorting/cropping the source. object-fit: contain preserves the original aspect ratio and
+   only occupies the space that ratio allows, letterboxed on black. */
+:fullscreen {
+  object-fit: contain !important;
+  background: #000;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

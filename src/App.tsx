@@ -8,6 +8,7 @@ import { AboutMeSection } from './components/AboutMeSection';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { FooterSection } from './components/FooterSection';
 import { ContactModal } from './components/ContactModal';
+import { CVModal } from './components/CVModal';
 import { DoodleClickEffect } from './components/DoodleClickEffect';
 import { SmoothScroll } from './components/SmoothScroll';
 import { ServiceDetailPage } from './components/ServiceDetailPage';
@@ -56,10 +57,10 @@ function PortfolioHome({ onOpenContact, onSelectService, onSelectProject, onGoHo
     <>
       <main>
         <HeroSection onOpenContact={onOpenContact} />
+        <AboutMeSection />
         <ServicesSection onOpenContact={onOpenContact} onSelectService={onSelectService} />
         <CasesSection onSelectProject={onSelectProject} />
         <SkillsSection />
-        <AboutMeSection />
         <TestimonialsSection />
       </main>
 
@@ -71,6 +72,7 @@ function PortfolioHome({ onOpenContact, onSelectService, onSelectProject, onGoHo
 export function App() {
   const portfolioData = usePortfolio();
   const [contactOpen, setContactOpen] = useState(false);
+  const [cvOpen, setCvOpen] = useState(false);
   const [activeService, setActiveService] = useState<Service | null>(null);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
@@ -135,6 +137,7 @@ export function App() {
       {/* Persistent Fixed Navbar Header */}
       <Navbar
         onOpenContact={() => setContactOpen(true)}
+        onOpenCV={() => setCvOpen(true)}
         onBackClick={() => window.history.back()}
         onSelectService={handleSelectService}
         onGoHome={handleGoHome}
@@ -188,6 +191,11 @@ export function App() {
       <ContactModal
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
+      />
+
+      <CVModal
+        isOpen={cvOpen}
+        onClose={() => setCvOpen(false)}
       />
     </div>
   );

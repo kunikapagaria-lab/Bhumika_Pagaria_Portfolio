@@ -6,8 +6,7 @@ export function getVimeoEmbedUrl(
   options?: { autoplay?: boolean; loop?: boolean; muted?: boolean }
 ): string | undefined {
   if (!url) return undefined;
-  const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-  const id = match?.[1];
+  const id = getVimeoVideoId(url);
   if (!id) return url;
 
   const params = new URLSearchParams();
@@ -18,4 +17,38 @@ export function getVimeoEmbedUrl(
 
   const query = params.toString();
   return `https://player.vimeo.com/video/${id}${query ? `?${query}` : ''}`;
+}
+
+export function getVimeoVideoId(url?: string): string | undefined {
+  if (!url) return undefined;
+  const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  return match?.[1];
+}
+
+export interface VimeoMeta {
+  ratio: number;
+  thumbnailUrl?: string;
+}
+
+// Vimeo's public oEmbed endpoint reports each video's real width/height (so a portrait or
+// square video can size its own player to its true shape instead of being forced into a 16:9
+// box) and a cover thumbnail (used as a blurred backdrop behind the letterboxed player). Falls
+// back to a plain 16:9/no-thumbnail result whenever the lookup fails — offline, blocked, or a
+// non-Vimeo/malformed URL.
+export async function fetchVimeoMeta(url?: string): Promise<VimeoMeta> {
+  const fallback: VimeoMeta = { ratio: 16 / 9 };
+  const id = getVimeoVideoId(url);
+  if (!id) return fallback;
+
+  try {
+    const res = await fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent(`https://vimeo.com/${id}`)}`);
+    if (!res.ok) return fallback;
+    const data = await res.json();
+    return {
+      ratio: data.width && data.height ? data.width / data.height : fallback.ratio,
+      thumbnailUrl: data.thumbnail_url,
+    };
+  } catch {
+    return fallback;
+  }
 }

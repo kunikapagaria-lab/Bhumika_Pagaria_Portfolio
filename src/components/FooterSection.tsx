@@ -425,10 +425,10 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onGoHome }) => {
             {(socialLinks as any).youtube && (
               <a href={(socialLinks as any).youtube} target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">YouTube</a>
             )}
+            <a href="#about" className="hover:text-black transition-colors">About Me</a>
             <a href="#services" className="hover:text-black transition-colors">Services</a>
             <a href="#cases" className="hover:text-black transition-colors">Highlights</a>
             <a href="#skills" className="hover:text-black transition-colors">Skills</a>
-            <a href="#about" className="hover:text-black transition-colors">About Me</a>
           </div>
 
           <div className="pt-6 border-t border-black/15 flex flex-col items-center justify-center gap-1.5 text-xs font-mono text-neutral-600">
