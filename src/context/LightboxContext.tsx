@@ -84,7 +84,7 @@ export const LightboxProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       {state && current && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-200"
+          className="fixed inset-0 z-[100] bg-white/80 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in duration-200"
           onClick={close}
         >
           <button
