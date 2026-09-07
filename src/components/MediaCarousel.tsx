@@ -1,15 +1,12 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FullscreenButton } from './FullscreenButton';
 import { fetchVimeoMeta, type VimeoMeta } from '../utils/vimeo';
-
-type Slide =
-  | { type: 'image'; url: string; alt?: string }
-  | { type: 'video'; url: string };
+import { type MediaSlide } from '../utils/media';
+import { useLightbox } from '../context/useLightbox';
 
 interface MediaCarouselProps {
-  slides: Slide[];
+  slides: MediaSlide[];
   title: string;
 }
 
@@ -36,10 +33,11 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
   // from the ratio) and applied directly, rather than leaving it to CSS auto-sizing.
   const [slotSize, setSlotSize] = useState({ width: 0, height: 0 });
   const slotRef = useRef<HTMLDivElement | null>(null);
+  const openLightbox = useLightbox();
 
   useLayoutEffect(() => {
     slides
-      .filter((s): s is Slide & { type: 'video' } => s.type === 'video')
+      .filter((s): s is MediaSlide & { type: 'video' } => s.type === 'video')
       .forEach((slide) => {
         if (slide.url in videoMeta) return;
         fetchVimeoMeta(slide.url).then((meta) => {
@@ -105,14 +103,24 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="relative max-w-full max-h-full w-fit rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black"
+            role="button"
+            tabIndex={0}
+            aria-label={current.type === 'video' ? 'View video larger' : 'View image larger'}
+            onClick={() => openLightbox(slides, index)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openLightbox(slides, index);
+              }
+            }}
+            className="relative max-w-full max-h-full w-fit rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
             style={videoBoxStyle}
           >
             {current.type === 'video' ? (
               <iframe
                 src={current.url}
                 title={title}
-                className="block w-full h-full border-0"
+                className="block w-full h-full border-0 pointer-events-none"
                 allow="autoplay; fullscreen; picture-in-picture"
                 allowFullScreen
               />
@@ -123,15 +131,6 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
                 className={`block w-auto h-auto max-w-full ${MEDIA_MAX_HEIGHT_CLASS}`}
               />
             )}
-
-            <FullscreenButton
-              content={
-                current.type === 'video'
-                  ? { type: 'video', url: current.url, ratio: videoMeta[current.url]?.ratio }
-                  : { type: 'image', url: current.url, alt: current.alt || title }
-              }
-              className="absolute top-4 right-4 z-10"
-            />
           </motion.div>
         </AnimatePresence>
 

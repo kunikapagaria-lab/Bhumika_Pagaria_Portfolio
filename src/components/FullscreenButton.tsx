@@ -1,24 +1,29 @@
 import React from 'react';
 import { Maximize } from 'lucide-react';
-import { useLightbox, type LightboxContent } from '../context/useLightbox';
+import { useLightbox } from '../context/useLightbox';
+import { type MediaSlide } from '../utils/media';
 
 interface FullscreenButtonProps {
-  content: LightboxContent;
+  slides: MediaSlide[];
+  index?: number;
   className?: string;
   label?: string;
 }
 
 // Small overlay button that opens the referenced artwork in the in-page lightbox (see
-// LightboxContext) — used wherever project artwork or a Vimeo embed is shown.
+// LightboxContext). Only needed where the artwork itself already has a different click action
+// (e.g. the Highlights poster opens its project page on click) — everywhere else, the artwork
+// is directly clickable to open the lightbox instead.
 export const FullscreenButton: React.FC<FullscreenButtonProps> = ({
-  content,
+  slides,
+  index = 0,
   className = '',
   label = 'View larger',
 }) => {
   const openLightbox = useLightbox();
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    openLightbox(content);
+    openLightbox(slides, index);
   };
 
   return (

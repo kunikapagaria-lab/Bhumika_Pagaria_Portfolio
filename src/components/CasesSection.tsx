@@ -246,10 +246,10 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                   <FullscreenButton
-                    content={
+                    slides={
                       currentProject.videoUrl
-                        ? { type: 'video', url: getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })! }
-                        : { type: 'image', url: currentProject.imageUrl, alt: currentProject.title }
+                        ? [{ type: 'video', url: getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })! }]
+                        : [{ type: 'image', url: currentProject.imageUrl, alt: currentProject.title }]
                     }
                     className="absolute top-4 right-4 z-20 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                   />

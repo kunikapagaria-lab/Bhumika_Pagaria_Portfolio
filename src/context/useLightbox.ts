@@ -1,11 +1,10 @@
 import { createContext, useContext } from 'react';
+import { type MediaSlide } from '../utils/media';
 
-export type LightboxContent =
-  | { type: 'image'; url: string; alt?: string }
-  | { type: 'video'; url: string; ratio?: number };
+export type OpenLightbox = (slides: MediaSlide[], startIndex?: number) => void;
 
-export const LightboxContext = createContext<(content: LightboxContent) => void>(() => {});
+export const LightboxContext = createContext<OpenLightbox>(() => {});
 
-// Lets any component open the lightbox without threading a prop down through the tree — used
-// by FullscreenButton, the one place that actually needs it.
+// Lets any component open the lightbox (with its own prev/next navigation across the given
+// slides) without threading a prop down through the tree.
 export const useLightbox = () => useContext(LightboxContext);

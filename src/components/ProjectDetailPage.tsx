@@ -2,26 +2,38 @@ import React from 'react';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import { type Project, type Service } from '../data/portfolioData';
 import { ExternalLink, CheckCircle2 } from 'lucide-react';
-import { FullscreenButton } from './FullscreenButton';
 import { MediaCarousel } from './MediaCarousel';
 import { getProjectMediaSlides } from '../utils/media';
 import { usePortfolio } from '../context/usePortfolio';
+import { useLightbox } from '../context/useLightbox';
 
 interface ProjectDetailPageProps {
   project: Project;
   onSelectService?: (service: Service) => void;
 }
 
-// A full-bleed image block within the rich report — its own "view larger" button, same as
-// every other photo on the site.
+// A full-bleed image block within the rich report — click it to open the same in-page
+// enlarged view every other photo on the site uses.
 const ReportImage: React.FC<{ value: { asset?: { url?: string }; alt?: string } }> = ({ value }) => {
+  const openLightbox = useLightbox();
   const url = value?.asset?.url;
   if (!url) return null;
 
   return (
-    <div className="rounded-2xl border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative my-2">
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label="View larger"
+      onClick={() => openLightbox([{ type: 'image', url, alt: value.alt }])}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLightbox([{ type: 'image', url, alt: value.alt }]);
+        }
+      }}
+      className="rounded-2xl border-2 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative my-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+    >
       <img src={url} alt={value.alt || ''} className="w-full h-auto" />
-      <FullscreenButton content={{ type: 'image', url, alt: value.alt }} className="absolute top-3 right-3 z-10" />
     </div>
   );
 };
