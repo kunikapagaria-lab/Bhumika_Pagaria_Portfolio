@@ -13,7 +13,7 @@ interface MediaCarouselProps {
   title: string;
 }
 
-const MAX_HEIGHT_CLASS = 'max-h-[60vh] sm:max-h-[65vh]';
+const SLOT_HEIGHT_CLASS = 'h-[60vh] sm:h-[65vh]';
 
 export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) => {
   const [index, setIndex] = useState(0);
@@ -42,11 +42,14 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
 
   return (
     <div className="mb-10">
-      {/* No frame, no letterbox fill — the visible box is exactly the artwork's own shape.
-          Arrows live in reserved side gutters (the px-12/px-14 padding below) rather than as
-          flex siblings competing for space with the box, so they never force the box to shrink
-          out of its true aspect ratio, and never overlap the media either. */}
-      <div className="relative px-11 sm:px-14">
+      {/* The outer slot below reserves a CONSTANT height on the page — nothing else ever moves
+          because of it, whether that's a photo finishing its load while you're scrolling past,
+          or swiping between a portrait video and a landscape photo within one project. The slot
+          itself is invisible (no background/border) — only the artwork's own card, centered
+          inside it, gets a frame, and that card is sized tightly to the artwork's real shape
+          (no letterbox fill). Arrows sit in reserved side gutters at a fixed vertical position
+          relative to the (constant-height) slot, so they never move or overlap the media. */}
+      <div className={`relative px-11 sm:px-14 ${SLOT_HEIGHT_CLASS} flex items-center justify-center`}>
         {slides.length > 1 && (
           <button
             onClick={goPrev}
@@ -64,7 +67,7 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className={`relative mx-auto max-w-full ${MAX_HEIGHT_CLASS} w-fit rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black`}
+            className="relative max-w-full max-h-full w-fit rounded-3xl border-2 border-black overflow-hidden shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] bg-black"
             style={{ aspectRatio: current.type === 'video' ? (videoMeta[current.url]?.ratio ?? 16 / 9) : undefined }}
           >
             {current.type === 'video' ? (
@@ -81,7 +84,7 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
                 ref={setMediaEl}
                 src={current.url}
                 alt={current.alt || title}
-                className={`block w-auto h-auto max-w-full ${MAX_HEIGHT_CLASS}`}
+                className="block w-auto h-auto max-w-full max-h-full"
               />
             )}
 
