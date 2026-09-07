@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { type Project } from '../data/portfolioData';
 import { usePortfolio } from '../context/usePortfolio';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -16,8 +16,6 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeProjectIndex, setActiveProjectIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const posterImgRef = useRef<HTMLImageElement>(null);
-  const posterVideoRef = useRef<HTMLIFrameElement>(null);
 
   const categories = [
     { id: 'all', label: 'All' },
@@ -239,39 +237,20 @@ export const CasesSection: React.FC<CasesSectionProps> = ({ onSelectProject }) =
                       intact (letterboxed on the card's black background) rather than cropped
                       to fill the frame. */}
                   <img
-                    ref={posterImgRef}
                     src={currentProject.imageUrl}
                     alt={currentProject.title}
                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700"
                   />
 
-                  {/* Loaded in the background (hidden behind the poster photo via negative
-                      z-index, not opacity, so it still renders correctly once fullscreened)
-                      purely so the fullscreen button can show the real video ready to go —
-                      no autoplay, so it sits paused until the visitor presses play themselves,
-                      and nothing plays audibly while it's just sitting hidden behind the photo. */}
-                  {currentProject.videoUrl && (
-                    <iframe
-                      ref={posterVideoRef}
-                      src={getVimeoEmbedUrl(currentProject.videoUrl, { loop: true })}
-                      title={currentProject.title}
-                      className="absolute inset-0 w-full h-full border-0 -z-10 pointer-events-none"
-                      allow="autoplay; fullscreen; picture-in-picture"
-                      allowFullScreen
-                    />
-                  )}
-
                   {/* Dark Vignette Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                   <FullscreenButton
-                    onActivate={() => {
-                      if (currentProject.videoUrl && posterVideoRef.current) {
-                        posterVideoRef.current.requestFullscreen?.();
-                      } else {
-                        posterImgRef.current?.requestFullscreen?.();
-                      }
-                    }}
+                    content={
+                      currentProject.videoUrl
+                        ? { type: 'video', url: getVimeoEmbedUrl(currentProject.videoUrl, { autoplay: true, loop: true })! }
+                        : { type: 'image', url: currentProject.imageUrl, alt: currentProject.title }
+                    }
                     className="absolute top-4 right-4 z-20 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                   />
 

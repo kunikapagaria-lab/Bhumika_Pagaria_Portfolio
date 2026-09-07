@@ -27,7 +27,6 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
   // Keyed by video slide URL, from Vimeo's oEmbed data — lets a portrait or square video size
   // itself at its own true shape instead of an assumed 16:9.
   const [videoMeta, setVideoMeta] = useState<Record<string, VimeoMeta>>({});
-  const [mediaEl, setMediaEl] = useState<HTMLImageElement | HTMLIFrameElement | null>(null);
 
   useLayoutEffect(() => {
     slides
@@ -79,7 +78,6 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
           >
             {current.type === 'video' ? (
               <iframe
-                ref={setMediaEl}
                 src={current.url}
                 title={title}
                 className="block w-full h-full border-0"
@@ -88,14 +86,20 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
               />
             ) : (
               <img
-                ref={setMediaEl}
                 src={current.url}
                 alt={current.alt || title}
                 className={`block w-auto h-auto max-w-full ${MEDIA_MAX_HEIGHT_CLASS}`}
               />
             )}
 
-            <FullscreenButton getTarget={() => mediaEl} className="absolute top-4 right-4 z-10" />
+            <FullscreenButton
+              content={
+                current.type === 'video'
+                  ? { type: 'video', url: current.url, ratio: videoMeta[current.url]?.ratio }
+                  : { type: 'image', url: current.url, alt: current.alt || title }
+              }
+              className="absolute top-4 right-4 z-10"
+            />
           </motion.div>
         </AnimatePresence>
 
