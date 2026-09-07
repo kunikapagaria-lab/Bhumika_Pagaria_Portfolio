@@ -13,7 +13,7 @@ interface MediaCarouselProps {
   title: string;
 }
 
-const SLOT_HEIGHT_CLASS = 'h-[60vh] sm:h-[65vh]';
+const SLOT_HEIGHT_CLASS = 'h-[45vh] sm:h-[50vh]';
 
 export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) => {
   const [index, setIndex] = useState(0);
