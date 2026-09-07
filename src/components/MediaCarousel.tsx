@@ -14,6 +14,13 @@ interface MediaCarouselProps {
 }
 
 const SLOT_HEIGHT_CLASS = 'h-[45vh] sm:h-[50vh]';
+// Same numbers as SLOT_HEIGHT_CLASS, but as a max-height for the <img> itself. A percentage
+// max-height (e.g. max-h-full) can't be used there — it needs its immediate parent (the
+// artwork's own frame) to have a definite height, but that frame only wraps snugly around the
+// image (w-fit, no set height of its own), so the percentage silently fails to resolve and the
+// image renders at its full natural height, getting clipped by the frame's overflow-hidden. A
+// viewport-relative unit always resolves regardless of the parent's sizing.
+const MEDIA_MAX_HEIGHT_CLASS = 'max-h-[45vh] sm:max-h-[50vh]';
 
 export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) => {
   const [index, setIndex] = useState(0);
@@ -84,7 +91,7 @@ export const MediaCarousel: React.FC<MediaCarouselProps> = ({ slides, title }) =
                 ref={setMediaEl}
                 src={current.url}
                 alt={current.alt || title}
-                className="block w-auto h-auto max-w-full max-h-full"
+                className={`block w-auto h-auto max-w-full ${MEDIA_MAX_HEIGHT_CLASS}`}
               />
             )}
 
